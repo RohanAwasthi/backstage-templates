@@ -1,0 +1,6 @@
+site_name: ${{values.component_id}}
+nav:
+  - Home: README.md
+
+plugins:
+  - techdocs-core

@@ -1,0 +1,177 @@
+apiVersion: scaffolder.backstage.io/v1beta3
+kind: Template
+metadata:
+  name: aws-ebs-template
+  title: AWS ElasticBeanstalk Template
+  description: Deploying java/python/nodejs web applications 
+  tags:
+    - aws
+    - java
+    - python
+    - nodejs
+    - webserver
+spec:
+  owner: group:EY
+  type: service
+  parameters:
+    - title: Provide some simple information
+      required:
+        - component_id
+        - owner
+      properties:
+        component_id:
+          title: Name
+          type: string
+          description: Unique name of the component
+          ui:field: EntityNamePicker
+        description:
+          title: Description
+          type: string
+          description: Help others understand what this website is for.
+        owner:
+          title: Owner
+          type: string
+          description: Owner of the component
+          ui:field: OwnerPicker
+          ui:options:
+            allowedKinds:
+              - Group
+              - User
+        track_id:
+          title: Track ID
+          type: string
+          description: AWS ElasticBeanstalk track ID
+    - title: Choose a location
+      required:
+        - repoUrl
+      properties:
+        repoUrl:
+          title: Repository Location
+          type: string
+          ui:field: RepoUrlPicker
+          ui:options:
+            allowedHosts:
+              - github.com
+    - title: Runtime Environment
+      required:
+        - solution_stack_name
+        - application_name
+        - environment_name
+      properties:
+        solution_stack_name:
+          title: Solution Stack Name
+          type: string
+          description: Solution Stack Name
+          pattern: '^([a-z])'
+        application_name:
+          title: application Name
+          type: string
+          description: application Name
+        environment_name:
+          title: environment Name
+          type: string
+          description: environment Name
+          pattern: '^(?=.{4,40}$)[a-z0-9]+(?:-[a-z0-9]+)*$' #'^[a-z0-9]+(?:-[a-z0-9]+)*$'
+
+  steps:
+    - id: template
+      name: Fetching Template
+      action: fetch:template
+      input:
+        url: ./skeleton
+        copyWithoutRender:
+          - .github/workflows/*
+        values:
+          component_id: ${{ parameters.component_id }}
+          description: ${{ parameters.description }}
+          destination: ${{ parameters.repoUrl | parseRepoUrl }}
+          owner: ${{ parameters.owner }}
+          solution_stack_name: ${{ parameters.solution_stack_name }}
+          application_name: ${{ parameters.application_name }}
+          environment_name: ${{ parameters.environment_name }}
+          track_id: ${{ parameters.track_id }}
+
+    - id: publish
+      name: Publishing to GitHub
+      action: publish:github
+      input:
+        allowedHosts:
+          - github.com
+        description: This is ${{ parameters.component_id }}
+        repoUrl: ${{ parameters.repoUrl }}
+        repoVisibility: public
+        defaultBranch: main
+
+    - id: webhook
+      name: Adding webhook to Github Respository
+      action: github:webhook
+      input: 
+        repoUrl: ${{ parameters.repoUrl }}
+        # webhookUrl: http://10.1.0.228:8080/github-webhook/
+        webhookUrl: http://172.190.72.81:8080/github-webhook/
+        events:
+        - push
+        active: true
+        contentType: json 
+
+    - id: jenkinsJob
+      name: create jenkins Job
+      action: jenkins:job:create
+      input:
+        component_id: ${{ parameters.component_id }}
+        allowedHosts: ['github.com']
+        # description: This is ${{ parameters.name }}
+        repoUrl: ${{ parameters.repoUrl }}
+        folder: "custom-actions"
+        job: 'tf-${{ parameters.component_id }}'
+        track_id: ${{ parameters.track_id }}
+        
+    # - id: sonarJenkinsJob
+    #   name: create code quality jenkins Job
+    #   action: jenkins:job:createSonar
+    #   input:
+    #     component_id: ${{ parameters.component_id }}
+    #     allowedHosts: ['github.com']
+    #     # description: This is ${{ parameters.name }}
+    #     repoUrl: ${{ parameters.repoUrl }}
+    #     folder: "custom-actions"
+    #     job: 'Sonar${{ parameters.component_id }}'
+    #     track_id: ${{ parameters.track_id }}
+
+
+    - id: jenkinsRun
+      name: Run Jenkins Job
+      action: jenkins:job:run
+      input:
+        component_id: ${{ parameters.component_id }}
+        allowedHosts: ['github.com']
+        # description: This is ${{ parameters.name }}
+        repoUrl: ${{ parameters.repoUrl }}
+        folder: "custom-actions"
+        job: 'tf-${{ parameters.component_id }}'
+
+    # - id: jenkinsRunSonar
+    #   name: Run Code Quality Jenkins Job
+    #   action: jenkins:job:runSonar
+    #   input:
+    #     component_id: ${{ parameters.component_id }}
+    #     allowedHosts: ['github.com']
+    #     # description: This is ${{ parameters.name }}
+    #     repoUrl: ${{ parameters.repoUrl }}
+    #     folder: "custom-actions"
+    #     job: 'Sonar${{ parameters.component_id }}'
+
+    - id: register
+      name: Registering Component
+      action: catalog:register
+      input:
+        repoContentsUrl: ${{ steps.publish.output.repoContentsUrl }}
+        catalogInfoPath: "/catalog-info.yaml"
+
+  output:
+    links:
+      - title: Repository
+        url: ${{ steps.publish.output.remoteUrl }}
+      - title: Open in catalog
+        icon: catalog
+        entityRef: ${{ steps.register.output.entityRef }}

@@ -1,0 +1,50 @@
+AWSTemplateFormatVersion: '2010-09-09'
+# Parameters:
+#   KeyName:
+#     Type: 'String'
+#     Description: Name of an existing EC2 key pair to enable SSH access to the instance
+
+Resources:
+  devBoxInstance:
+    Type: 'AWS::EC2::Instance'
+    Properties:
+      # ImageId: ami-0b7acb262cc9ea2ea
+      ImageId: ami-0563edf04b1f60aa7
+      InstanceType: t2.large
+      KeyName: devex_windows2
+      # KeyName: !Ref KeyName
+      BlockDeviceMappings:
+        - DeviceName: /dev/sda1
+          Ebs:
+            VolumeSize: 50
+      SecurityGroupIds:
+        - !Ref  devBoxSecurityGroup
+
+  devBoxSecurityGroup:
+    Type: 'AWS::EC2::SecurityGroup'
+    Properties:
+      GroupDescription: Security group for the DevBox Instance
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 3389
+          ToPort: 3389
+          CidrIp: 0.0.0.0/0
+        - IpProtocol: tcp
+          FromPort: 80
+          ToPort: 80
+          CidrIp: 0.0.0.0/0
+        - IpProtocol: tcp
+          FromPort: 443
+          ToPort: 443
+          CidrIp: 0.0.0.0/0
+
+  devBoxEIP:
+    Type: 'AWS::EC2::EIP'
+    Properties:
+      Domain: vpc
+
+  devBoxEC2AssociationEIP:
+    Type: 'AWS::EC2::EIPAssociation'
+    Properties:
+      InstanceId: !Ref devBoxInstance
+      AllocationId: !GetAtt devBoxEIP.AllocationId

@@ -1,0 +1,224 @@
+apiVersion: scaffolder.backstage.io/v1beta3
+kind: Template
+metadata:
+  name: apache-azure-web-app
+  title: Apache Azure Terraform Template
+  description: Simple apache web app hosted on Azure VM 
+  tags:
+    - apache
+    - azure
+    - "applicationtype-webapplication"
+spec:
+  owner: group:EY
+  type: service
+  parameters:
+    - title: Basic Information
+      required:
+        - component_id
+        - owner
+      properties:
+        component_id:
+          title: Name
+          type: string
+          description: Unique name of the component
+          ui:field: EntityNamePicker
+        description:
+          title: Description
+          type: string
+          description: Help others understand what this website is for.
+        owner:
+          title: Owner
+          type: string
+          description: Owner of the component
+          ui:field: OwnerPicker
+          ui:options:
+            allowedKinds:
+              - Group
+              - User
+    - title: Source Code Manangement
+      required:
+        - repoUrl
+      properties:
+        repoUrl:
+          title: Repository Location
+          type: string
+          ui:field: RepoUrlPicker
+          ui:options:
+            allowedHosts:
+              - github.com
+    # - title: Configure Azure
+    #   required:
+    #     - subscription_id
+    #   properties:
+    #     subscription_id:
+    #       title: Subscription ID
+    #       type: string
+    #       description: Azure subscription ID
+    # - title: Configure Azure Resource Group
+    #   required:
+    #     - rg_name
+    #     - rg_location
+    #   properties:
+    #     rg_name:
+    #       title: Resource Group Name
+    #       type: string
+    #       description: Azure resource group name
+    #     rg_location:
+    #       title: Resource Group Location
+    #       type: string
+    #       description: Azure resource group Location
+    # - title: Azure Virtual Network Details
+    #   required:
+    #     - vnet_name
+    #     - vnet_address_space
+    #   properties:
+    #     vnet_name:
+    #       title: VNet Name
+    #       type: string
+    #       description: Azure VNet name
+    #     vnet_address_space:
+    #       title: VNet CIDR
+    #       type: string
+    #       description: Azure VNet IPv4 CIDR
+    # - title: Azure Subnet Details
+    #   required:
+    #     - subnet_name
+    #     - subnet_address_prefixes
+    #   properties:
+    #     subnet_name:
+    #       title: Subnet Name
+    #       type: string
+    #       description: Subnet name
+    #     subnet_address_prefixes:
+    #       title: Subnet CIDR
+    #       type: string
+    #       description: Subnet's IPv4 CIDR
+    - title: azure Instance Configuration
+      required:
+        # - vm_name
+        - vm_size
+        # - vm_admin_username
+        - vm_publisher
+      properties:
+        # vm_name:
+        #   title: azure Instance Name
+        #   type: string
+        #   description: Name of azure instance
+        vm_size:
+          title: azure Instance Size
+          type: string
+          description: Size of azure instance
+        # vm_admin_username:
+        #   title: azure Instance Admin Username
+        #   type: string
+        #   description: Admin username of azure instance
+        vm_publisher:
+          title: azure publisher
+          type: string
+          description: Type of azure publisher
+    # - title:  Instance Key
+    #   required:
+    #     - instance_key
+    #   properties:
+    #     instance_key:
+    #       title: Instance Key
+    #       type: string
+    #       description: Key pair
+    # - title: Tags
+    #   required:
+    #     - ApplicationType
+    #   properties:
+    #     - ApplicationType:
+    #       title: Application Type
+    #       type: string
+    #       description: The type of application
+  steps:
+    - id: template
+      name: Fetching Template
+      action: fetch:template
+      input:
+        url: ./skeleton
+        copyWithoutRender:
+          - .github/workflows/*
+        values:
+          component_id: ${{ parameters.component_id }}
+          description: ${{ parameters.description }}
+          destination: ${{ parameters.repoUrl | parseRepoUrl }}
+          owner: ${{ parameters.owner }}
+          # subscription_id: ${{ parameters.subscription_id }}
+          # rg_location: ${{ parameters.rg_location }}
+          # rg_name: ${{ parameters.rg_name }}
+          # vnet_name: ${{ parameters.vnet_name }}
+          # vnet_address_space: ${{ parameters.vnet_address_space }}
+          # subnet_name: ${{ parameters.subnet_name }}
+          # subnet_address_prefixes: ${{ parameters.subnet_address_prefixes }}
+          vm_publisher: ${{ parameters.vm_publisher }}
+          vm_size: ${{ parameters.vm_size }}
+          # instance_key: ${{ parameters.instance_key }}
+          # ApplicationType: ${{parameters.ApplicationType}}
+
+    - id: publish
+      name: Publishing to GitHub
+      action: publish:github
+      input:
+        allowedHosts:
+          - github.com
+        description: This is ${{ parameters.component_id }}
+        repoUrl: ${{ parameters.repoUrl }}
+        repoVisibility: public
+        defaultBranch: main
+
+    - id: webhook
+      name: Adding webhook to Github Respository
+      action: github:webhook
+      input: 
+        repoUrl: ${{ parameters.repoUrl }}
+        # webhookUrl: http://10.1.0.228:8080/github-webhook/
+        webhookUrl: http://172.190.72.81:8080/github-webhook/
+        events:
+        - push
+        active: true
+        contentType: json 
+        
+    - id: jenkinsFolder
+      name: Create Jenkins Folder
+      action: jenkins:folder:create
+      input:
+        repoUrl: ${{ parameters.repoUrl }}
+        folder: apache-azure-app
+        job: ${{ parameters.component_id }}
+        
+    - id: jenkinsJob
+      name: create jenkins Job
+      action: jenkins:customjob:create
+      input:
+        component_id: ${{ parameters.component_id }}
+        allowedHosts: ['github.com']
+        repoUrl: ${{ parameters.repoUrl }}
+        folder: apache-azure-app
+        job: ${{ parameters.component_id }}
+        
+    - id: jenkinsRun
+      name: Run Jenkins Job
+      action: jenkins:job:run
+      input:
+        component_id: ${{ parameters.component_id }}
+        allowedHosts: ['github.com']
+        repoUrl: ${{ parameters.repoUrl }}
+        folder: apache-azure-app
+        job: ${{ parameters.component_id }}
+        
+    - id: register
+      name: Register
+      action: catalog:register
+      input:
+        repoContentsUrl: ${{ steps.publish.output.repoContentsUrl }}
+        catalogInfoPath: "/catalog-info.yaml"
+        
+  output:
+    links:
+      - title: Repository
+        url: ${{ steps.publish.output.remoteUrl }}
+      - title: Open in catalog
+        icon: catalog
+        entityRef: ${{ steps.register.output.entityRef }}

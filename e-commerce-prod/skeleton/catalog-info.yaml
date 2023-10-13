@@ -1,0 +1,27 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: ${{values.component_id | dump}}
+  {%- if values.description %}
+  description: ${{values.description | dump}}
+  {%- endif %}
+  labels:
+    system: web-apps
+  links:
+    - url: https://github.com/${{values.destination.owner + "/" + values.destination.repo}}
+      title: ${{values.component_id | dump}}
+      icon: code
+  tags:
+    - java
+    - "applicationtype-webapplication"
+  annotations:
+    {%- if values.folder %}
+    jenkins.io/github-folder: ${{values.folder + "/" + values.job}}
+    {%- endif %}
+    backstage.io/techdocs-ref: dir:.
+    github.com/project-slug: ${{values.destination.owner + "/" + values.destination.repo}}
+spec:
+  type: service
+  lifecycle: production
+  owner: ${{values.owner | dump}}
+  ownerEmail: ${{values.ownerEmail}}

@@ -1,0 +1,142 @@
+apiVersion: scaffolder.backstage.io/v1beta3
+kind: Template
+metadata:
+  name: srping-boot-java-application-dev-template
+  title: Java App DEV Template
+  description: Create a new CRA website project
+  tags:
+    - java
+    - "applicationtype-webapplication"
+spec:
+  owner: group:EY
+  type: service
+  parameters:
+    - title: Provide some simple information
+      required:
+        - component_id
+        - owner
+      properties:
+        component_id:
+          title: Name
+          type: string
+          description: Unique name of the component
+          ui:field: EntityNamePicker
+        description:
+          title: Description
+          type: string
+          description: Help others understand what this website is for.
+        owner:
+          title: Owner
+          type: string
+          description: Owner of the component
+          ui:field: OwnerPicker
+          ui:options:
+            allowedKinds:
+              - Group
+              - User
+    - title: Source Code Manangement
+      required:
+        - repoUrl
+      properties:
+        repoUrl:
+          title: Repository Location
+          type: string
+          ui:field: RepoUrlPicker
+          ui:options:
+            allowedHosts:
+              - github.com 
+    - title: Jenkins
+      required:
+        - folder
+        - job
+      properties:
+        folder:
+          title: Jenkins Folder
+          type: string
+          description: Folder name inside which job has been created.
+        job:
+          title: Job Name
+          type: string
+          description: The jenkins job name.
+  steps:
+    - id: template
+      name: Fetch Skeleton + Template
+      action: fetch:template
+      input:
+        url: ./skeleton
+        copyWithoutRender:
+          - .github/workflows/*
+        values:
+          component_id: ${{ parameters.component_id }}
+          description: ${{ parameters.description }}
+          destination: ${{ parameters.repoUrl | parseRepoUrl }}
+          owner: ${{ parameters.owner }}
+          folder: ${{ parameters.folder }}
+          job: ${{ parameters.job }}
+
+    - id: publish
+      name: Publishing to GitHub
+      action: publish:github
+      input:
+        allowedHosts:
+          - github.com
+        description: This is ${{ parameters.component_id }}
+        repoUrl: ${{ parameters.repoUrl }}
+        repoVisibility: public
+        defaultBranch: main
+
+    - id: webhook
+      name: Adding webhook to Github Respository
+      action: github:webhook
+      input: 
+        repoUrl: ${{ parameters.repoUrl }}
+        # webhookUrl: http://10.1.0.228:8080/github-webhook/
+        webhookUrl: http://172.190.72.81:8080/github-webhook/
+        events:
+        - push
+        active: true
+        contentType: json 
+        
+    - id: jenkinsFolder
+      name: Create Jenkins Folder
+      action: jenkins:folder:create
+      input:
+        repoUrl: ${{ parameters.repoUrl }}
+        folder: ${{ parameters.folder }}
+        job: ${{ parameters.job }}
+        
+    - id: jenkinsJob
+      name: create jenkins Job
+      action: jenkins:customjob:create
+      input:
+        component_id: ${{ parameters.component_id }}
+        allowedHosts: ['github.com']
+        repoUrl: ${{ parameters.repoUrl }}
+        folder: ${{ parameters.folder }}
+        job: ${{ parameters.job }}
+        
+    - id: jenkinsRun
+      name: Run Jenkins Job
+      action: jenkins:job:run
+      input:
+        component_id: ${{ parameters.component_id }}
+        allowedHosts: ['github.com']
+        repoUrl: ${{ parameters.repoUrl }}
+        folder: ${{ parameters.folder }}
+        job: ${{ parameters.job }}  
+
+    - id: register
+      name: Register
+      action: catalog:register
+      input:
+        repoContentsUrl: ${{ steps.publish.output.repoContentsUrl }}
+        catalogInfoPath: "/catalog-info.yaml"
+
+  output:
+    links:
+      - title: Repository
+        url: ${{ steps.publish.output.remoteUrl }}
+      - title: Open in catalog
+        icon: catalog
+        entityRef: ${{ steps.register.output.entityRef }}
+

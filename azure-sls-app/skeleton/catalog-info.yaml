@@ -1,0 +1,32 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: ${{values.component_id | dump}}
+  {%- if values.description %}
+  description: ${{values.description | dump}}
+  {%- else %}
+  description: Serverless Project with Azure Functions and Azure Pipeline
+  {%- endif %}  
+  labels:
+    system: web-apps
+  links:
+    - url: https://github.com/${{values.destination.owner + "/" + values.destination.repo}}
+      title: ${{values.component_id | dump}}
+      icon: code
+  tags:
+    - typescript
+    - azure-function
+    - azure-pipeline
+    - applicationtype-serverlessapplication
+  annotations:
+    github.com/project-slug: ${{values.destination.owner + "/" + values.destination.repo}}
+    backstage.io/linguist: https://github.com/${{values.destination.owner + "/" + values.destination.repo}}
+    dev.azure.com/project: azure-tf-cicid
+    dev.azure.com/build-definition: ${{values.destination.owner + "." + values.destination.repo}}
+    azure.com/tag-selector: pid/p44
+    azure.com/microsoft-web-sites: devextest-dev
+    
+spec:
+  type: service
+  lifecycle: experimental
+  owner: ${{ values.owner }}

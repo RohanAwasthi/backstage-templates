@@ -1,0 +1,147 @@
+apiVersion: scaffolder.backstage.io/v1beta3
+kind: Template
+metadata:
+  name: azure-sls-app-template
+  title: Azure Function Template
+  description: Simple Typescript Azure Function template
+  tags:
+    - typescript
+    - azure
+    - azure-function
+    - "applicationtype-serverlessapplication"
+spec:
+  owner: group:EY
+  type: service
+  parameters:
+    - title: Provide some simple information
+      required:
+        - component_id
+        - owner
+      properties:
+        component_id:
+          title: Name
+          type: string
+          description: Unique name of the component
+          ui:field: EntityNamePicker
+        description:
+          title: Description
+          type: string
+          description: Help others understand what this website is for.
+        owner:
+          title: Owner
+          type: string
+          description: Owner of the component
+          ui:field: OwnerPicker
+          ui:options:
+            allowedKinds:
+              - Group
+              - User
+    - title: Source Code Manangement
+      required:
+        - repoUrl
+      properties:
+        repoUrl:
+          title: Repository Location
+          type: string
+          ui:field: RepoUrlPicker
+          ui:options:
+            allowedHosts:
+              - github.com  
+    - title: Azure App detalis
+      required:
+        - projectName
+      properties:
+        projectName:
+          title: Project Name
+          type: string
+          description: Provide the name of the project.
+        projectEnvironment:
+          title: Environment
+          type: string
+          description: Environment like dev/stage/prod
+        azLocation:
+          title: Azure Location
+          type: string
+          description: Location to deploy Azure  Resources  
+  steps:
+    - id: template
+      name: Fetch Skeleton + Template
+      action: fetch:template
+      input:
+        url: ./skeleton
+        copyWithoutRender:
+          - .github/workflows/*
+        values:
+          component_id: ${{ parameters.component_id }}
+          description: ${{ parameters.description }}
+          destination: ${{ parameters.repoUrl | parseRepoUrl }}
+          owner: ${{ parameters.owner }}
+          projectName: ${{ parameters.projectName }}
+          projectEnvironment: ${{ parameters.projectEnvironment }}
+          azLocation: ${{ parameters.azLocation }}
+
+    - id: publish
+      name: Publishing to GitHub
+      action: publish:github
+      input:
+        allowedHosts:
+          - github.com
+        description: This is ${{ parameters.component_id }}
+        repoUrl: ${{ parameters.repoUrl }}
+        repoVisibility: public
+        defaultBranch: main
+
+    - id: webhook
+      name: Adding webhook to Github Respository
+      action: github:webhook
+      input: 
+        repoUrl: ${{ parameters.repoUrl }}
+        # webhookUrl: http://10.1.0.228:8080/github-webhook/
+        webhookUrl: http://172.190.72.81:8080/github-webhook/
+        events:
+        - push
+        active: true
+        contentType: json 
+        
+    - id: jenkinsFolder
+      name: Create Jenkins Folder
+      action: jenkins:folder:create
+      input:
+        repoUrl: ${{ parameters.repoUrl }}
+        folder: azure-function-app
+        job: ${{ parameters.component_id }}
+        
+    - id: jenkinsJob
+      name: create jenkins Job
+      action: jenkins:customjob:create
+      input:
+        component_id: ${{ parameters.component_id }}
+        allowedHosts: ['github.com']
+        repoUrl: ${{ parameters.repoUrl }}
+        folder: azure-function-app
+        job: ${{ parameters.component_id }}
+        
+    - id: jenkinsRun
+      name: Run Jenkins Job
+      action: jenkins:job:run
+      input:
+        component_id: ${{ parameters.component_id }}
+        allowedHosts: ['github.com']
+        repoUrl: ${{ parameters.repoUrl }}
+        folder: azure-function-app
+        job: ${{ parameters.component_id }}
+
+    - id: register
+      name: Register
+      action: catalog:register
+      input:
+        repoContentsUrl: ${{ steps.publish.output.repoContentsUrl }}
+        catalogInfoPath: "/catalog-info.yaml"
+
+  output:
+    links:
+      - title: Repository
+        url: ${{ steps.publish.output.remoteUrl }}
+      - title: Open in catalog
+        icon: catalog
+        entityRef: ${{ steps.register.output.entityRef }}      
