@@ -13,23 +13,23 @@ app_version_source                   = "JtSpringProject-0.0.1-SNAPSHOT.jar" # ch
 force_delete_ebs_application_version = true
 bucket_id                            = "devex-deploy"
 elastic_beanstalk_app_tags = {
-  name     = "P03_ekscluster"
-  PID      = "pGNACIL01"
-  prj-name = "AWS GDS CIL team"
-  owner    = "vedant.purushottam.kulkarni@gds.ey.com"
+  name     = "P44_ekscluster"
+  PID      = "P44"
+  prj-name = "DevEx Platform"
+  owner    = "devtanu.majumder@gds.ey.com"
 }
 
 iam_role_tags = {
-  name     = "P03_ekscluster"
-  PID      = "pGNACIL01"
-  prj-name = "AWS GDS CIL team"
-  owner    = "vedant.purushottam.kulkarni@gds.ey.com"
+  name     = "P44_ekscluster"
+  PID      = "P44"
+  prj-name = "DevEx Platform"
+  owner    = "devtanu.majumder@gds.ey.com"
 }
 tags = {
-  name     = "P03_ekscluster"
-  PID      = "pGNACIL01"
-  prj-name = "AWS GDS CIL team"
-  owner    = "vedant.purushottam.kulkarni@gds.ey.com"
+  name     = "P44_ekscluster"
+  PID      = "P44"
+  prj-name = "DevEx Platform"
+  owner    = "devtanu.majumder@gds.ey.com"
 }
 
 #elastic beanstalk env
