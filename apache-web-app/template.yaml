@@ -195,13 +195,13 @@ spec:
       name: Register
       action: catalog:register
       input:
-        repoContentsUrl: 'https://github.com/ItRachii/aws-apache-web-app/blob/main'
+        repoContentsUrl: 'https://github.com/RohanAwasthi/aws-apache-web-app/blob/main'
         catalogInfoPath: "/catalog-info.yaml"
         
   output:
     links:
       - title: Repository
-        url: 'https://github.com/ItRachii/aws-apache-web-app'
+        url: 'https://github.com/RohanAwasthi/aws-apache-web-app'
       - title: Open in catalog
         icon: catalog
         entityRef: ${{ steps.register.output.entityRef }}

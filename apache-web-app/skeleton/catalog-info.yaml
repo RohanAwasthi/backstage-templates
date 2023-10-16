@@ -9,7 +9,7 @@ metadata:
     system: web-apps
     trackid: aws-apache-web-app-20231005140155
   links:
-    - url: https://github.com/ItRachii/aws-apache-web-app
+    - url: https://github.com/RohanAwasthi/aws-apache-web-app
       title: ${{values.component_id | dump}}
       icon: code
   tags:
@@ -19,7 +19,7 @@ metadata:
   annotations:
     jenkins.io/github-folder: 'apache-aws-web-app/${{values.component_id}}'
     backstage.io/techdocs-ref: dir:.
-    github.com/project-slug: 'ItRachii/aws-apache-web-app'
+    github.com/project-slug: 'RohanAwasthi/aws-apache-web-app'
     sonarqube.org/project-key: 'JtSpringProject/rachit'
 spec:
   type: service
