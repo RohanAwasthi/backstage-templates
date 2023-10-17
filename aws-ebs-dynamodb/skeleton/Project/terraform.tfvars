@@ -27,20 +27,20 @@ elastic_beanstalk_app_tags = {
   name     = "P44_ekscluster"
   PID      = "P44"
   prj-name = "DevEx Platform"
-  owner    = "devtanu.majumder@gds.ey.com"
+  owner    = " "
 }
 
 iam_role_tags = {
   name     = "P44_ekscluster"
   PID      = "P44"
   prj-name = "DevEx Platform"
-  owner    = "devtanu.majumder@gds.ey.com"
+  owner    = " "
 }
 tags = {
   name     = "P44_ekscluster"
   PID      = "P44"
   prj-name = "DevEx Platform"
-  owner    = "devtanu.majumder@gds.ey.com"
+  owner    = " "
 }
 
 #elastic beanstalk env
