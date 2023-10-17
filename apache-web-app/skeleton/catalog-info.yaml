@@ -21,6 +21,7 @@ metadata:
     backstage.io/techdocs-ref: dir:.
     github.com/project-slug: 'RohanAwasthi/aws-apache-web-app'
     sonarqube.org/project-key: 'JtSpringProject/rachit'
+    prometheus.io/rules: ./prometheus-rule.yaml
 spec:
   type: service
   lifecycle: experimental
