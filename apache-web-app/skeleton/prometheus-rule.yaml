@@ -1,0 +1,11 @@
+groups:
+- name: example
+  rules:
+  - alert: HighErrorRate
+    expr: error_rate > 0.1
+    for: 5m
+    labels:
+      severity: critical
+    annotations:
+      summary: High error rate detected
+      description: Error rate is consistently above 10% for the last 5 minutes. Investigate and fix the issue.
