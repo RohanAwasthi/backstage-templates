@@ -20,7 +20,7 @@ metadata:
     jenkins.io/github-folder: 'apache-aws-web-app/${{values.component_id}}'
     backstage.io/techdocs-ref: dir:.
     github.com/project-slug: 'RohanAwasthi/aws-apache-web-app'
-    sonarqube.org/project-key: 'JtSpringProject/rachit'
+    sonarqube.org/project-key: 'JTSpringboot/parthbhrg'
    # prometheus.io/rules: './prometheus-rule.yaml'
    # prometheus.io/rule: prometheus_http_requests_total,sum by (handler) (prometheus_http_requests_total),prometheus_http_requests_total|component
    # prometheus.io/alert: all
