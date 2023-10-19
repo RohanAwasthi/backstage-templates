@@ -22,8 +22,8 @@ metadata:
     github.com/project-slug: 'RohanAwasthi/aws-apache-web-app'
     sonarqube.org/project-key: 'JtSpringProject/rachit'
    # prometheus.io/rules: './prometheus-rule.yaml'
-   # prometheus.io/rule: prometheus_http_requests_total,sum by (handler) (prometheus_http_requests_total),prometheus_http_requests_total|component
-   # prometheus.io/alert: all
+    prometheus.io/rule: prometheus_http_requests_total,sum by (handler) (prometheus_http_requests_total),prometheus_http_requests_total|component
+    prometheus.io/alert: all
 spec:
   type: service
   lifecycle: experimental
