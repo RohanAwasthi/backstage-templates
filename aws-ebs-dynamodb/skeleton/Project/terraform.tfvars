@@ -25,20 +25,20 @@ force_delete_ebs_application_version = true
 bucket_id                            = "devex-deploy"
 elastic_beanstalk_app_tags = {
   name     = "P44_ekscluster"
-  PID      = "P44"
+  PID      = "pDADEVX03"
   prj-name = "DevEx Platform"
   owner    = " "
 }
 
 iam_role_tags = {
   name     = "P44_ekscluster"
-  PID      = "P44"
+  PID      = "pDADEVX03"
   prj-name = "DevEx Platform"
   owner    = " "
 }
 tags = {
   name     = "P44_ekscluster"
-  PID      = "P44"
+  PID      = "pDADEVX03"
   prj-name = "DevEx Platform"
   owner    = " "
 }
