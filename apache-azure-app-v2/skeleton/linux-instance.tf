@@ -55,6 +55,14 @@ resource "azurerm_linux_virtual_machine" "terra-demo" {
     # sku       = "16.04-LTS"
     # version   = "latest"
   }
+
+  tags = {
+    Name     = "p44_virtual machine"
+    PID      = "pDADEVX03"
+    prj-name = "DevEx Platform"
+    owner    = "DevEX Team"
+  }
+
 }
 
 resource "azurerm_virtual_machine_extension" "terra-demo" {
