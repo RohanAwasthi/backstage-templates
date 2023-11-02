@@ -18,7 +18,11 @@ resource "aws_vpc" "app_vpc" {
   cidr_block = var.vpc_cidr
 
   tags = {
-    Name = "app-vpc"
+  // Name = "app-vpc"
+    name     = "P44_vpc"
+    PID      = "pDADEVX03"
+    prj-name = "DevEx Platform"
+    owner    = "DevEX Team"
   }
 }
 
@@ -26,7 +30,11 @@ resource "aws_internet_gateway" "igw" {
   vpc_id = aws_vpc.app_vpc.id
 
   tags = {
-    Name = "vpc_igw"
+    //Name = "vpc_igw"
+  name     = "P44_igw"
+  PID      = "pDADEVX03"
+  prj-name = "DevEx Platform"
+  owner    = "DevEX Team"
   }
 }
 
@@ -37,7 +45,11 @@ resource "aws_subnet" "public_subnet" {
   availability_zone = "us-west-2a"
 
   tags = {
-    Name = "public-subnet"
+     //Name = "public-subnet"
+    name     = "P44_subnet"
+    PID      = "pDADEVX03"
+    prj-name = "DevEx Platform"
+    owner    = "DevEX Team"
   }
 }
 
@@ -50,7 +62,11 @@ resource "aws_route_table" "public_rt" {
   }
 
   tags = {
-    Name = "public_rt"
+   //Name = "public_rt"
+  name     = "P44_rt"
+  PID      = "pDADEVX03"
+  prj-name = "DevEx Platform"
+  owner    = "DevEX Team"
   }
 }
 
@@ -75,11 +91,19 @@ resource "aws_instance" "web" {
   EOF
 
   tags = {
-    Name = "web_instance"
+  //Name = "web_instance"
+  name     = "P44_ec2"
+  PID      = "pDADEVX03"
+  prj-name = "DevEx Platform"
+  owner    = "DevEX Team"
   }
 
   volume_tags = {
-    Name = "web_instance"
+   //Name = "web_instance"
+  name     = "P44_ebs"
+  PID      = "pDADEVX03"
+  prj-name = "DevEx Platform"
+  owner    = "DevEX Team"
   } 
 }
 
