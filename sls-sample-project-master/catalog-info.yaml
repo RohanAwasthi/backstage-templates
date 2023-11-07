@@ -1,0 +1,30 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: serverless-project
+  description: Serverless Project with AWS Lambda and Code Services
+  labels:
+    system: web-apps
+  links:
+    - url: https://github.com/AdithyaBNayak/sls-cicd-demo/
+      title: Serverless-Project
+      icon: code
+  tags:
+    - node-js
+    - aws
+    - applicationtype-serverlessapplication
+  annotations:
+    aws.amazon.com/aws-codepipeline: arn:aws:codepipeline:ap-south-1:854132807883:devexCodePipelineSample
+    aws.amazon.com/aws-codebuild-project: arn:aws:codebuild:ap-south-1:854132807883:project/devexCodeBuildForSampleApp
+    github.com/project-slug: 'AdithyaBNayak/sls-cicd-demo'
+    aws.com/lambda-function-name: sls-cicd-dev-devexSampleLambda
+    aws.com/lambda-region: ap-south-1
+    # azure.com/microsoft-web-sites: devex
+    # azure.com/tag-selector: pid/p44
+    backstage.io/linguist: https://github.com/AdithyaBNayak/sls-cicd-demo
+    github.com/code-structure: AdithyaBNayak/sls-cicd-demo/
+    
+spec:
+  type: service
+  lifecycle: experimental
+  owner: user:adithya.bhairanje

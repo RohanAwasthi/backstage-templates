@@ -1,0 +1,23 @@
+
+service: sls-cicd
+
+provider:
+  name: aws
+  runtime: nodejs14.x
+  stage: dev
+  region: ap-south-1
+  memorySize: 128
+  timeout: 3
+
+functions:
+  devexSampleLambda:
+    handler: handler.logger
+    events:
+      - http:
+          path: message
+          method: get
+    tags:
+      name: P44_Lambda
+      pid: P44
+      owner: Adithya Bhairanje
+     
