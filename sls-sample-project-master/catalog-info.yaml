@@ -15,7 +15,7 @@ metadata:
     - applicationtype-serverlessapplication
   annotations:
     aws.amazon.com/aws-codepipeline: arn:aws:codepipeline:ap-south-1:854132807883:devexCodePipelineSample
-    aws.amazon.com/aws-codebuild-project: arn:aws:codebuild:ap-south-1:854132807883:project/devexCodeBuildForSampleApp
+    aws.amazon.com/aws-codebuild-project: arn:aws:codebuild:ap-south-1:854132807883:project/devexcodebuild
     github.com/project-slug: 'AdithyaBNayak/sls-cicd-demo'
     aws.com/lambda-function-name: sls-cicd-dev-devexSampleLambda
     aws.com/lambda-region: ap-south-1
