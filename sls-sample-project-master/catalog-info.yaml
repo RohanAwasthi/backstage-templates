@@ -16,13 +16,13 @@ metadata:
   annotations:
     aws.amazon.com/aws-codepipeline: arn:aws:codepipeline:ap-south-1:854132807883:devexcodepipeline
     aws.amazon.com/aws-codebuild-project: arn:aws:codebuild:ap-south-1:854132807883:project/devexcodebuild
-    github.com/project-slug: 'AdithyaBNayak/sls-cicd-demo'
+    github.com/project-slug: 'RohanAwasthi/sls-sample-project-master'
     aws.com/lambda-function-name: sls-cicd-dev-devexSampleLambda
     aws.com/lambda-region: ap-south-1
     # azure.com/microsoft-web-sites: devex
     # azure.com/tag-selector: pid/p44
     backstage.io/linguist: https://github.com/RohanAwasthi/backstage-templates/tree/main/sls-sample-project-master
-    github.com/code-structure: AdithyaBNayak/sls-cicd-demo/
+    github.com/code-structure: RohanAwasthi/sls-sample-project-master/
     
 spec:
   type: service
