@@ -21,7 +21,7 @@ metadata:
     aws.com/lambda-region: ap-south-1
     # azure.com/microsoft-web-sites: devex
     # azure.com/tag-selector: pid/p44
-    backstage.io/linguist: https://github.com/AdithyaBNayak/sls-cicd-demo
+    backstage.io/linguist: https://github.com/RohanAwasthi/backstage-templates/tree/main/sls-sample-project-master
     github.com/code-structure: AdithyaBNayak/sls-cicd-demo/
     
 spec:
