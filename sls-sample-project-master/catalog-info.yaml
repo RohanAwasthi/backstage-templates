@@ -6,7 +6,7 @@ metadata:
   labels:
     system: web-apps
   links:
-    - url: https://github.com/AdithyaBNayak/sls-cicd-demo/
+    - url: https://github.com/RohanAwasthi/backstage-templates/tree/main/sls-sample-project-master
       title: Serverless-Project
       icon: code
   tags:
