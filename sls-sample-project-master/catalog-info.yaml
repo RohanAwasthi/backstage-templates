@@ -27,4 +27,4 @@ metadata:
 spec:
   type: service
   lifecycle: experimental
-  owner: user:adithya.bhairanje
+  owner: user:parth.bhargava
