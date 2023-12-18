@@ -82,6 +82,8 @@ spec:
         allowedHosts: ['github.com']
         description: This is ${{ parameters.name }}
         repoUrl: ${{ parameters.repoUrl }}
+        repoVisibility: public
+        defaultBranch: main
     # Trigger a GitHub Action to set up the EKS cluster
     - id: github-action
       name: Trigger GitHub Action
