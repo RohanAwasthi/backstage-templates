@@ -11,7 +11,7 @@
 # }
 
 module "eks" {
-  source  = "../Module"
+  source  = "app.terraform.io/TeKanAid/eks/aws"
   version = "0.0.7"
 
   region               = "us-east-1"

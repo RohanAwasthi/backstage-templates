@@ -82,15 +82,13 @@ spec:
         allowedHosts: ['github.com']
         description: This is ${{ parameters.name }}
         repoUrl: ${{ parameters.repoUrl }}
-        repoVisibility: public
-        defaultBranch: main
     # Trigger a GitHub Action to set up the EKS cluster
     - id: github-action
       name: Trigger GitHub Action
       action: github:actions:dispatch
       input:
         workflowId: manage-eks-cluster.yml  # GitHub Action workflow ID
-        repoUrl: ${{ parameters.repoUrl }}
+        repoUrl: 'github.com?repo=AWS-EKS&amp;owner=RohanAwasthi'
         branchOrTagName: 'main'  # The branch to run this action on
         workflowInputs:
           clusterName: ${{ parameters.clusterName }}
