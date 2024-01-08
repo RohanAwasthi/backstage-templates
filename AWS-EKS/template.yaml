@@ -88,7 +88,7 @@ spec:
       action: github:actions:dispatch
       input:
         workflowId: manage-eks-cluster.yml  # GitHub Action workflow ID
-        repoUrl: 'github.com?repo=AWS-EKS&amp;owner=RohanAwasthi'
+        repoUrl: 'https://github.com/RohanAwasthi/backstage-templates/tree/main/AWS-EKS'
         branchOrTagName: 'main'  # The branch to run this action on
         workflowInputs:
           clusterName: ${{ parameters.clusterName }}
