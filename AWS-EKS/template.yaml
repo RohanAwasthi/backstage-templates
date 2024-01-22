@@ -4,7 +4,7 @@ kind: Template
 # Template metadata. Here's your intro to what this template does.
 metadata:
   name: eks-cluster
-  title: Node.js App on AWS EKS Cluster
+  title: AWS EKS Cluster
   description: Deploy a Node.js App on AWS EKS Cluster using Terraform
 # The specification for how the template behaves
 spec:
