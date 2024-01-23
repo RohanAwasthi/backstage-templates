@@ -11,7 +11,7 @@
 # }
 
 module "eks" {
-  source  = "../Module"
+  source  = "./../Module"
   version = "0.0.7"
 
   region               = "us-east-1"
