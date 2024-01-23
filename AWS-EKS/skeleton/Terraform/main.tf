@@ -12,7 +12,7 @@
 
 module "eks" {
   source  = "./../Module"
-  version = "0.0.7"
+  #version = "0.0.7"
 
   region               = "us-east-1"
   cluster_version      = "1.27"
