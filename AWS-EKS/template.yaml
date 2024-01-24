@@ -88,7 +88,7 @@ spec:
       action: github:actions:dispatch
       input:
         workflowId: manage-eks-cluster.yml  # GitHub Action workflow ID
-        #repoUrl: ${{ parameters.repoUrl }}
+        repoUrl: ${{ parameters.repoUrl }}
         branchOrTagName: 'main'  # The branch to run this action on
         workflowInputs:
           clusterName: ${{ parameters.clusterName }}
