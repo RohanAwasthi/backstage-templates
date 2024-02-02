@@ -1,5 +1,5 @@
 #!/bin/bash
-cd Project
+cd Terraform
 
 {
 terraform init
