@@ -117,7 +117,7 @@ spec:
         active: true
         contentType: json    
         
-     - id: jenkinsFolder
+    - id: jenkinsFolder
       name: Create Jenkins Folder
       action: jenkins:folder:create
       input:
