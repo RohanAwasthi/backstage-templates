@@ -142,7 +142,7 @@ spec:
         name: ${{ parameters.name }}
         allowedHosts: ['github.com']
         repoUrl: ${{ parameters.repoUrl }}
-        folder: apache-aws-web-app
+        folder: aws-eks-app
         job: ${{ parameters.name }}    
           
     # Register the new component in the Backstage catalog
