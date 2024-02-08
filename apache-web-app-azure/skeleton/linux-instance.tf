@@ -24,11 +24,11 @@ resource "azurerm_linux_virtual_machine" "terra-demo" {
     azurerm_network_interface.terra-demo.id,
   ]
 
- // admin_ssh_key {
- //   username   = "azureuser"
- //   public_key = file("~/.ssh/id_rsa.pub")  // ls "~/.ssh/" to check the key and for creating ssh-keygen.exe
+  admin_ssh_key {
+    username   = "azureuser"
+    public_key = file("~/.ssh/id_rsa.pub")  // ls "~/.ssh/" to check the key and for creating ssh-keygen.exe
     
- // }
+  }
 
   os_disk {
     caching              = "ReadWrite"
