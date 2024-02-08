@@ -41,8 +41,8 @@ resource "azurerm_linux_virtual_machine" "terra-demo" {
     publisher = "Canonical"
   # offer     = ${{ values.vm_publisher }}
     offer      =    var.offer
-    sku       = "16.04-LTS"
-    version   = "latest"
+    sku       = "20.04-LTS"
+   # version   = "latest"
     # publisher = "Canonical"
     # offer     = "UbuntuServer"
     # sku       = "16.04-LTS"
