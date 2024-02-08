@@ -20,6 +20,7 @@ resource "azurerm_linux_virtual_machine" "terra-demo" {
   size                  = var.size
   # size                = "Standard_D2_v2"
   admin_username      = "azureuser"
+  disable_password_authentication = false
   network_interface_ids = [
     azurerm_network_interface.terra-demo.id,
   ]
