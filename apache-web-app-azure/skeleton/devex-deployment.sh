@@ -1,3 +1,6 @@
+#!/bin/bash
+repo_name=$(git config --get remote.origin.url | sed 's/.*\///;s/.git$//')
+
 az login
 
 terraform init
