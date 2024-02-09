@@ -12,7 +12,7 @@ resource "azurerm_network_interface" "terra-demo" {
 }
 
 resource "azurerm_linux_virtual_machine" "terra-demo" {
-  name                = "terra-virtual-machine"
+  name                = "${{ values.component_id }}"
   # name                = "terra-machine01-.NET"
   resource_group_name = azurerm_resource_group.terra-demo.name
   location            = azurerm_resource_group.terra-demo.location
