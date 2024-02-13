@@ -24,4 +24,5 @@ metadata:
 spec:
   type: service
   lifecycle: development
+  system: azure cloud
   owner: ${{ values.owner }}
