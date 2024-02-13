@@ -1,7 +1,7 @@
 apiVersion: scaffolder.backstage.io/v1beta3
 kind: Template
 metadata:
-  name: srping-boot-java-application-dev-template
+  name: spring-boot-java-application-dev-template
   title: Java App DEV Template
   description: Create a new CRA website project
   tags:
