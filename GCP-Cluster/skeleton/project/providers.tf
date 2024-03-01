@@ -13,11 +13,13 @@ terraform {
 // }
 
 provider "google" {
-  project     = "int-devops-cloud-0224"
+  project = var.project  
+// project     = "int-devops-cloud-0224"
   // credentials = file("int-devops-cloud-0224-aa604c3a1df3.json")
 }
  
 provider "google-beta" {
-  project     = "int-devops-cloud-0224"
+  project = var.project 
+// project     = "int-devops-cloud-0224"
   // credentials = file("int-devops-cloud-0224-aa604c3a1df3.json")
 }
