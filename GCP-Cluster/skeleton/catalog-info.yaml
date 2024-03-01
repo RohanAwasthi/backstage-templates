@@ -8,7 +8,7 @@ metadata:
 
   links:
     - url: https://github.com/${{values.destination.owner + "/" + values.destination.repo}}
-      title: ${{values.component_id | dump}}
+      title: ${{values.project | dump}}
       icon: code
 
   labels:
