@@ -1,7 +1,7 @@
 # With node pool config and private endpoint enabled
-container_cluster_name   = "gke-clus1ter"
-location                 = "us-central1"
-project                  = "int-devops-cloud-0224"
+container_cluster_name   = "${{ values.container_cluster_name }}"
+location                 = "${{ values.location }}"
+project                  = "${{ values.project }}"
 #node_locations           = ["us-central1-a", "us-central1-b", "us-central1-c"]
 #deletion_protection      = false
 #network                  = "projects/int-devops-cloud-0224/global/networks/devex-vpc"
@@ -18,7 +18,7 @@ enable_autopilot         = true
 #}
 #service_external_ips_config_enabled = true
 #vertical_pod_autoscaling_enabled    = true
-description                         = "Demo cluster for testing"
+description                         = "${{ values.description }}"
 #default_max_pods_per_node           = 8
 #enable_kubernetes_alpha             = false
 #gateway_api_config_channel          = "CHANNEL_STANDARD"
