@@ -7,7 +7,17 @@ terraform {
   }
 }
 
+// provider "google" {
+//  project     = "first-407310"
+//  # credentials = file("C:/Users/WY182AQ/Downloads/first-407310-a78185d4f709.json")
+// }
+
 provider "google" {
-  project     = "first-407310"
-  # credentials = file("C:/Users/WY182AQ/Downloads/first-407310-a78185d4f709.json")
+  project     = "int-devops-cloud-0224"
+  // credentials = file("int-devops-cloud-0224-aa604c3a1df3.json")
+}
+ 
+provider "google-beta" {
+  project     = "int-devops-cloud-0224"
+  // credentials = file("int-devops-cloud-0224-aa604c3a1df3.json")
 }
