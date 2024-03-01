@@ -65,30 +65,30 @@ spec:
   # Steps that the template will execute in order
   steps:
     # Fetch the base template
-    - id: fetch-base
-      name: Fetch Base
-      action: fetch:template
-      input:
-        url: ./skeleton  # Where the base content is stored
-        copyWithoutTemplating:
-          - .github/workflows/*
-        values:
-          project: ${{ parameters.project }}
-          destination: ${{ parameters.repoUrl | parseRepoUrl }}
-          container_cluster_name: ${{parameters.container_cluster_name}}
-          location: ${{parameters.location}}
-          description: ${{parameters.description}}
+   # - id: fetch-base
+   #   name: Fetch Base
+   #   action: fetch:template
+   #   input:
+   #     url: ./skeleton  # Where the base content is stored
+   #     copyWithoutTemplating:
+   #       - .github/workflows/*
+   #     values:
+   #       project: ${{ parameters.project }}
+   #       destination: ${{ parameters.repoUrl | parseRepoUrl }}
+   #       container_cluster_name: ${{parameters.container_cluster_name}}
+   #       location: ${{parameters.location}}
+   #       description: ${{parameters.description}}
           
     # Publish the code to a GitHub repo
-    - id: publish
-      name: Publish
-      action: publish:github
-      input:
-        allowedHosts: ['github.com']
-        description: This is ${{ parameters.project }}
-        repoUrl: ${{ parameters.repoUrl }}
-        repoVisibility: public
-        defaultBranch: main
+ #   - id: publish
+ #     name: Publish
+ #     action: publish:github
+ #     input:
+ #       allowedHosts: ['github.com']
+ #       description: This is ${{ parameters.project }}
+ #       repoUrl: ${{ parameters.repoUrl }}
+ #       repoVisibility: public
+ #       defaultBranch: main
         
     # Trigger a GitHub Action to set up the EKS cluster
    # - id: github-action
