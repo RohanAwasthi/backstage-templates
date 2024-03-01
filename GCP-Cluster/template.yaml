@@ -77,7 +77,7 @@ spec:
           destination: ${{ parameters.repoUrl | parseRepoUrl }}
           container_cluster_name: ${{parameters.container_cluster_name}}
           location: ${{parameters.location}}
-          action: ${{parameters.action}}
+          description: ${{parameters.description}}
           
     # Publish the code to a GitHub repo
     - id: publish
