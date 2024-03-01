@@ -1,5 +1,5 @@
 module "gke_cluster" {
-  source                                     = "../"
+  source                                     = "../module"
   container_cluster_name                     = var.container_cluster_name
   location                                   = var.location
   node_locations                             = var.node_locations
