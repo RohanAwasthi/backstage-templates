@@ -73,7 +73,7 @@ spec:
         copyWithoutTemplating:
           - .github/workflows/*
         values:
-          name: ${{ parameters.project }}
+          project: ${{ parameters.project }}
           destination: ${{ parameters.repoUrl | parseRepoUrl }}
           container_cluster_name: ${{parameters.container_cluster_name}}
           location: ${{parameters.location}}
