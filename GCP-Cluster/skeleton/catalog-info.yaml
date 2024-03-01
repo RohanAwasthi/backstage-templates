@@ -1,45 +1,15 @@
 apiVersion: backstage.io/v1alpha1
 kind: Component
 metadata:
-  name: ${{values.project | dump}}
-  {%- if values.description %}
-  description: ${{values.description | dump}}
-  {%- endif %}
-
-  links:
-    - url: https://github.com/${{values.destination.owner + "/" + values.destination.repo}}
-      title: ${{values.project | dump}}
-      icon: code
-
-  labels:
-    system: web-apps
-  {%- if values.track_id %}
-    trackid: ${{values.track_id | dump}}
-  {%- endif %}
-    environmentname: "gke env"
-
-  tags:
-    - gcp
-    - gke cluster
-
+  name: gcp-gke-template
   annotations:
-    # add elastic beanstalk annotation
-    jenkins.io/github-folder: 'custom-actions/tf-${{ values.project }}'
-    github.com/project-slug: ${{values.destination.owner + "/" + values.destination.repo}}
-    backstage.io/techdocs-ref: dir:.
-    {%- if (values.solution_stack_name =='java')  %}
-   # backstage.io/linguist: https://github.com/ItRachii/spring-boot-ebs
-   # sonarqube.org/project-key: 'demo-app/aws-elb-java'
-    {%- elif (values.solution_stack_name == 'python') %}
-  #  backstage.io/linguist: https://github.com/ItRachii/ebs-sample-python-application
-  #  sonarqube.org/project-key: 'python-app/aws-elb-python'
-    {%- elif (values.solution_stack_name == 'node') %} 
-  #  backstage.io/linguist: https://github.com/ItRachii/ebs-sample-node-application
-   # sonarqube.org/project-key: 'node-app/aws-elb-node'
- #   {%- endif %}
-
+    github.com/project-slug: RohanAwasthi/GCP-Cluster
+  description: GCP gke cluster managed by Terraform
+  tags:
+    - aws
+    - eks
+    - terraform
 spec:
   type: service
   lifecycle: experimental
-  system: gke-cluster
-  owner: ${{values.owner | dump}}
+  owner: guests
