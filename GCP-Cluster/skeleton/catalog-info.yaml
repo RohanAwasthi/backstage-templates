@@ -19,8 +19,8 @@ metadata:
     environmentname: "gke env"
 
   tags:
-    - aws
-    - "applicationtype-webapplication"
+    - gcp
+    - gke cluster
 
   annotations:
     # add elastic beanstalk annotation
