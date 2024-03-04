@@ -71,7 +71,7 @@ spec:
         copyWithoutRender:
           - .github/workflows/*
         values:
-          project: ${{ parameters.project }}
+          component_id: ${{ parameters.project }}
           description: ${{ parameters.description }}
           destination: ${{ parameters.repoUrl | parseRepoUrl }}
           #owner: ${{ parameters.owner }}
