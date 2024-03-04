@@ -148,8 +148,8 @@ spec:
       name: Register
       action: catalog:register
       input:
-        repoContentsUrl: 'https://github.com/RohanAwasthi/backstage-templates/tree/main/GCP-Cluster'
-        catalogInfoPath: 'https://github.com/RohanAwasthi/backstage-templates/tree/main/GCP-Cluster/catalog-info.yaml'  # Where the catalog info is stored
+        repoContentsUrl: 'https://github.com/RohanAwasthi/backstage-templates/blob/main/GCP-Cluster/skeleton'
+        catalogInfoPath: 'https://github.com/RohanAwasthi/backstage-templates/blob/main/GCP-Cluster/skeleton/catalog-info.yaml'  # Where the catalog info is stored
   # Output links to the user after the template execution
   output:
     links:
