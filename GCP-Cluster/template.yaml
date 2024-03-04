@@ -1,219 +1,160 @@
+# Define the API version and kind of resource
 apiVersion: scaffolder.backstage.io/v1beta3
 kind: Template
+# Template metadata. Here's your intro to what this template does.
 metadata:
-  name: gcp-gke-template
-  title: GCP GKE Template
-  description: Deploying gke cluster
-  tags:
-    - gcp
-    - nodejs
-    - webserver
+  name: gke-cluster
+  title: GCP GKE Cluster
+  description: Deploy GCP GKE Cluster using Terraform
+# The specification for how the template behaves
 spec:
-  owner: group:EY
+  # Who owns this template. Generally, it could be a team or individual
+  owner: user:guest
+  # The type of service this template deploys
   type: service
+  # User-input parameters. Makes your templates dynamic!
   parameters:
-    - title: Provide some simple information(Cluster Basics)
+    # Ask the user to input some basic app details
+    - title: Provide Details
       required:
         - project
-        - description
-        - container_cluster_name
-        - location
-        - owner
       properties:
         project:
-          title: Name
+          title: Project ID
           type: string
-          description: Unique name of the project
-          ui:field: EntityNamePicker
-        description:
-          title: Description
-          type: string
-          description: Write the description of the project.
-          ui:field: EntityNamePicker
-        container_cluster_name:
-          title: Cluster-Name
-          type: string
-          description: Provide some name for your cluster.
-        location:
-          title: Location
-          type: string
-          description: Give location for the project to be made in.
-        owner:
-          title: Owner
-          type: string
-          description: Owner of the component
-          ui:field: OwnerPicker
+          description: Unique name for your project
+          ui:autofocus: true  # This field gets auto-focused in UI
           ui:options:
-            allowedKinds:
-              - Group
-              - User
-        track_id:
-          title: Track ID
-          type: string
-          description: GCP gke track ID
-    - title: Choose a location
+            rows: 5  # Number of rows in the input area
+    # Ask the user where they want to store the code
+    - title: Choose a Repo location
       required:
         - repoUrl
       properties:
         repoUrl:
           title: Repository Location
           type: string
-          ui:field: RepoUrlPicker
+          ui:field: RepoUrlPicker  # A special UI component for selecting repo URLs
           ui:options:
             allowedHosts:
-              - github.com
-    # - title: Fleet registration
-    #   required:
-    #     - initial_node_count
-    #     - cluster_node_config
-    #     - primary_nodes_name
-    #     - primary_nodes_name_prefix
-    #   properties:
-    #     initial_node_count:
-    #       title: Initial Node Count
-    #       type: number
-    #       description: Enter the initial node count.
-    #       pattern: '^(?=.{4,40}$)[a-z0-9]+(?:-[a-z0-9]+)*$' #'^([a-z])'
-    #     cluster_node_config:
-    #       disk_size_gb: 
-    #        type: number
-    #       disk_type:
-    #        type: string
-    #     primary_nodes_name:
-    #       title: primary nodes name
-    #       type: string
-    #       description: The name of the node pool
-    #       pattern: '^(?=.{4,40}$)[a-z0-9]+(?:-[a-z0-9]+)*$' #'^[a-z0-9]+(?:-[a-z0-9]+)*$'
-    #     primary_nodes_name_prefix:
-    #       title: primary nodes name prefix
-    #       type: string
-    #       description: Creates a unique name for the node pool beginning with the specified prefix.
-    #       pattern: '^(?=.{4,40}$)[a-z0-9]+(?:-[a-z0-9]+)*$' #'^[a-z0-9]+(?:-[a-z0-9]+)*$'
-    # - title: Node Pool Management
-    #   required:
-    #     - project
-    #     - node_pool_config
-    #     - node_pool_management
-    #   properties:
-    #     project:
-    #       title: Project ID in which to create the node pool.
-    #       type: string
-    #       description: The ID of the project in which to create the node pool.
-    #     node_pool_config:
-    #       machine_type: 
-    #        type: string  
-    #       image_type:
-    #        type: string  
-    #     node_pool_management:
-    #       auto_repair: 
-    #        type: bool  
-    #       auto_upgrade:
-    #        type: bool     
-           
-
-steps:
-    - id: template
-      name: Fetching Template
-      action: fetch:template
-      input:
-        url: ./skeleton
-        copyWithoutRender:
-          - .github/workflows/*
-        values:
-          project: ${{ parameters.project }}
-          container_cluster_name: ${{ parameters.container_cluster_name }}
-          destination: ${{ parameters.repoUrl | parseRepoUrl }}
-          owner: ${{ parameters.owner }}
-          location: ${{ parameters.location }}
-          # initial_node_count: ${{ parameters.initial_node_count }}
-          # cluster_node_config: ${{ parameters.cluster_node_config }}
-          # primary_nodes_name: ${{ parameters.primary_nodes_name }}
-          # primary_nodes_name_prefix: ${{ parameters.primary_nodes_name_prefix }}
-          # node_pool_config: ${{ parameters.node_pool_config }}
-          # node_pool_management: ${{ parameters.node_pool_management }}
-          track_id: ${{ parameters.track_id }}
-
-    - id: publish
-      name: Publishing to GitHub
-      action: publish:github
-      input:
-        allowedHosts:
-          - github.com
-        description: This is ${{ parameters.project }}
-        repoUrl: ${{ parameters.repoUrl }}
-        repoVisibility: public
-        defaultBranch: main
-
-    - id: webhook
-      name: Adding webhook to Github Respository
-      action: github:webhook
-      input: 
-        repoUrl: ${{ parameters.repoUrl }}
-        # webhookUrl: http://10.1.0.228:8080/github-webhook/
-        webhookUrl: http://172.190.72.81:8080/github-webhook/
-        events:
-        - push
-        active: true
-        contentType: json 
-
-    - id: jenkinsJob
-      name: create jenkins Job
-      action: jenkins:job:create
-      input:
-        component_id: ${{ parameters.project }}
-        allowedHosts: ['github.com']
-        # description: This is ${{ parameters.name }}
-        repoUrl: ${{ parameters.repoUrl }}
-        folder: "custom-actions"
-        job: 'tf-${{ parameters.project }}'
-        track_id: ${{ parameters.track_id }}
+              - github.com  # Allowed hosts for repository
+    # Parameters for setting up the EKS cluster
+    - title: Basic GKE Cluster Configuration
+      required:
+        - container_cluster_name
+        - location
+        - description
+      properties:
+        container_cluster_name:
+          title: Cluster Name
+          type: string
+          description: The name of your GKE cluster
+          ui:autofocus: true
+        location:
+          title: Location
+          type: string
+          description: The GCP location where the cluster will be deployed
+          enum:
+            - us-central1
+            - us-central2
+        description:
+          title: Description
+          type: string
+          description: Description of the project
+          ui:autofocus: true
+  # Steps that the template will execute in order
+  steps:
+    # Fetch the base template
+   - id: fetch-base
+     name: Fetch Base
+     action: fetch:template
+     input:
+       url: ./skeleton  # Where the base content is stored
+      #  copyWithoutTemplating:
+      #    - .github/workflows/*
+       values:
+         project: ${{ parameters.project }}
+         destination: ${{ parameters.repoUrl | parseRepoUrl }}
+         container_cluster_name: ${{parameters.container_cluster_name}}
+         location: ${{parameters.location}}
+         description: ${{parameters.description}}
+          
+    # Publish the code to a GitHub repo
+   - id: publish
+     name: Publish
+     action: publish:github
+     input:
+       allowedHosts: ['github.com']
+       description: This is ${{ parameters.project }}
+       repoUrl: ${{ parameters.repoUrl }}
+       repoVisibility: public
+       defaultBranch: main
         
-    # - id: sonarJenkinsJob
-    #   name: create code quality jenkins Job
-    #   action: jenkins:job:createSonar
-    #   input:
-    #     component_id: ${{ parameters.component_id }}
-    #     allowedHosts: ['github.com']
-    #     # description: This is ${{ parameters.name }}
-    #     repoUrl: ${{ parameters.repoUrl }}
-    #     folder: "custom-actions"
-    #     job: 'Sonar${{ parameters.component_id }}'
-    #     track_id: ${{ parameters.track_id }}
-
-
+    # Trigger a GitHub Action to set up the EKS cluster
+   # - id: github-action
+    #  name: Trigger GitHub Action
+     # action: github:actions:dispatch
+      #input:
+       # workflowId: manage-eks-cluster.yml  # GitHub Action workflow ID
+        #repoUrl: ${{ parameters.repoUrl }}
+       # branchOrTagName: 'main'  # The branch to run this action on
+        #workflowInputs:
+         # clusterName: ${{ parameters.clusterName }}
+          #awsRegion: ${{ parameters.region }}
+          #action: ${{ parameters.action }}
+          
+   - id: webhook
+     name: Adding webhook to Github Respository
+     action: github:webhook
+     input: 
+       repoUrl: ${{ parameters.repoUrl }}
+       webhookUrl: http://10.1.0.228:8080/github-webhook/
+       #webhookUrl: http://172.190.72.81:8080/github-webhook/
+       events:
+       - push
+       active: true
+       contentType: json    
+        
+    #- id: jenkinsFolder
+      #name: Create Jenkins Folder
+      #action: jenkins:folder:create
+      #input:
+       # repoUrl: ${{ parameters.repoUrl }}
+        #folder: gcp-gke-cluster
+        #job: ${{ parameters.project }}
+        
+    #- id: jenkinsJob
+      #name: create jenkins Job
+      #action: jenkins:customjob:create
+      #input:
+        #component_id : ${{ parameters.project }}
+        #allowedHosts: ['github.com']
+        #repoUrl: ${{ parameters.repoUrl }}
+        #folder: gcp-gke-cluster
+        #job: ${{ parameters.project }}
+        
     - id: jenkinsRun
       name: Run Jenkins Job
       action: jenkins:job:run
       input:
-        component_id: ${{ parameters.project }}
+        component_id: int-devops-cloud-0224
         allowedHosts: ['github.com']
-        # description: This is ${{ parameters.name }}
         repoUrl: ${{ parameters.repoUrl }}
-        folder: "custom actions"
-        job: 'tf-${{ parameters.project }}'
-
-    # - id: jenkinsRunSonar
-    #   name: Run Code Quality Jenkins Job
-    #   action: jenkins:job:runSonar
-    #   input:
-    #     component_id: ${{ parameters.component_id }}
-    #     allowedHosts: ['github.com']
-    #     # description: This is ${{ parameters.name }}
-    #     repoUrl: ${{ parameters.repoUrl }}
-    #     folder: "custom-actions"
-    #     job: 'Sonar${{ parameters.component_id }}'
-
+        folder: gcp-gke-cluster
+        job: int-devops-cloud-0224
+          
+    # Register the new component in the Backstage catalog
     - id: register
-      name: Registering Component
+      name: Register
       action: catalog:register
       input:
-        repoContentsUrl: ${{ steps.publish.output.repoContentsUrl }}
-        catalogInfoPath: "/catalog-info.yaml"
-
-output:
+        repoContentsUrl: ${{ steps['publish'].output.repoContentsUrl }}
+        catalogInfoPath: '/catalog-info.yaml'  # Where the catalog info is stored
+  # Output links to the user after the template execution
+  output:
     links:
       - title: Repository
-        url: ${{ steps.publish.output.remoteUrl }}
+        url: ${{ steps['publish'].output.remoteUrl }}
       - title: Open in catalog
         icon: catalog
-        entityRef: ${{ steps.register.output.entityRef }}
+        entityRef: ${{ steps['register'].output.entityRef }}
