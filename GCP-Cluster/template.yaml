@@ -148,7 +148,7 @@ spec:
       name: Register
       action: catalog:register
       input:
-        repoContentsUrl: "./skeleton"
+        repoContentsUrl: "./"
         catalogInfoPath: '/catalog-info.yaml'  # Where the catalog info is stored
   # Output links to the user after the template execution
   output:
