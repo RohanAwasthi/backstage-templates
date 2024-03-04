@@ -17,9 +17,9 @@ spec:
     # Ask the user to input some basic app details
     - title: Provide Details
       required:
-        - project
+        - component_id
       properties:
-        project:
+        component_id:
           title: Project ID
           type: string
           description: Unique name for your project
@@ -71,7 +71,7 @@ spec:
         copyWithoutRender:
           - .github/workflows/*
         values:
-          project: ${{ parameters.project }}
+          component_id: ${{ parameters.component_id }}
           description: ${{ parameters.description }}
           destination: ${{ parameters.repoUrl | parseRepoUrl }}
           #owner: ${{ parameters.owner }}
@@ -86,7 +86,7 @@ spec:
       input:
         allowedHosts:
           - github.com
-        description: This is ${{ parameters.project }}
+        description: This is ${{ parameters.component_id }}
         repoUrl: ${{ parameters.repoUrl }}
         repoVisibility: public
         defaultBranch: main
@@ -107,7 +107,7 @@ spec:
       name: create jenkins Job
       action: jenkins:job:create
       input:
-        component_id: ${{ parameters.project }}
+        component_id: ${{ parameters.component_id }}
         allowedHosts: ['github.com']
         # description: This is ${{ parameters.name }}
         repoUrl: ${{ parameters.repoUrl }}
@@ -132,7 +132,7 @@ spec:
       name: Run Jenkins Job
       action: jenkins:job:run
       input:
-        component_id: ${{ parameters.project }}
+        component_id: ${{ parameters.component_id }}
         allowedHosts: ['github.com']
         # description: This is ${{ parameters.name }}
         repoUrl: ${{ parameters.repoUrl }}
