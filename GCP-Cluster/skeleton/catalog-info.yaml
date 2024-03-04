@@ -11,5 +11,6 @@ metadata:
     - terraform
 spec:
   type: service
+  system: GCP
   lifecycle: experimental
   owner: guests
