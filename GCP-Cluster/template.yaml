@@ -6,6 +6,10 @@ metadata:
   name: gke-cluster
   title: GCP GKE Cluster
   description: Deploy GCP GKE Cluster using Terraform
+  tags:
+    - GCP
+    - Cloud
+    - "kubernetes"
 # The specification for how the template behaves
 spec:
   # Who owns this template. Generally, it could be a team or individual
