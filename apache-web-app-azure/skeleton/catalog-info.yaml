@@ -20,7 +20,7 @@ metadata:
     backstage.io/techdocs-ref: dir:.
     github.com/project-slug:  ${{values.destination.owner + "/" + values.destination.repo}}
     backstage.io/linguist: https://github.com/${{values.destination.owner + "/" + values.destination.repo}}
-    azure.com/tag-selector: ${{values.component_id}}/${{values.component_id}}
+    azure.com/tag-selector: pid/${{values.component_id}}
 spec:
   type: service
   lifecycle: development
