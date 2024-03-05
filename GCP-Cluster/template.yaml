@@ -7,8 +7,8 @@ metadata:
   title: GCP GKE Cluster
   description: Deploy GCP GKE Cluster using Terraform
   tags:
-    - GCP
-    - Cloud
+    - gcp
+    - cloud
     - "kubernetes"
 # The specification for how the template behaves
 spec:
