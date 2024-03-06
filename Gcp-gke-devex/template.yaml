@@ -67,32 +67,30 @@ spec:
           description: Description of the project
           ui:autofocus: true
   # Steps that the template will execute in order
-  steps:
-    # Fetch the base template
-   # - id: fetch-base
-   #   name: Fetch Base
-   #   action: fetch:template
-   #   input:
-   #     url: ./skeleton  # Where the base content is stored
-   #     copyWithoutTemplating:
-   #       - .github/workflows/*
-   #     values:
-   #       project: ${{ parameters.project }}
-   #       destination: ${{ parameters.repoUrl | parseRepoUrl }}
-   #       container_cluster_name: ${{parameters.container_cluster_name}}
-   #       location: ${{parameters.location}}
-   #       description: ${{parameters.description}}
+steps:
+  - id: template
+    name: Fetching Template
+    action: fetch:template
+    input:
+      url: ./skeleton
+      copyWithoutRender:
+        - .github/workflows/*
+      values:
+        container _cluster_name: ${{ parameters.container _cluster_name }}
+        description: ${{ parameters.description }}
+        destination: ${{ parameters.repoUrl | parseRepoUrl }}
+        location: ${{ parameters.location }}
           
     # Publish the code to a GitHub repo
- #   - id: publish
- #     name: Publish
- #     action: publish:github
- #     input:
- #       allowedHosts: ['github.com']
- #       description: This is ${{ parameters.project }}
- #       repoUrl: ${{ parameters.repoUrl }}
- #       repoVisibility: public
- #       defaultBranch: main
+  - id: publish
+    name: Publish
+    action: publish:github
+    input:
+      allowedHosts: ['github.com']
+      description: This is ${{ parameters.container_cluster_name }}
+      repoUrl: ${{ parameters.repoUrl }}
+      repoVisibility: public
+      defaultBranch: main
         
     # Trigger a GitHub Action to set up the EKS cluster
    # - id: github-action
@@ -107,17 +105,17 @@ spec:
           #awsRegion: ${{ parameters.region }}
           #action: ${{ parameters.action }}
           
- #   - id: webhook
- #     name: Adding webhook to Github Respository
- #     action: github:webhook
- #     input: 
- #       repoUrl: ${{ parameters.repoUrl }}
- #       webhookUrl: http://10.1.0.228:8080/github-webhook/
-        #webhookUrl: http://172.190.72.81:8080/github-webhook/
- #       events:
- #       - push
- #       active: true
- #       contentType: json    
+  - id: webhook
+    name: Adding webhook to Github Respository
+    action: github:webhook
+    input: 
+      repoUrl: ${{ parameters.repoUrl }}
+      webhookUrl: http://10.1.0.228:8080/github-webhook/
+      #webhookUrl: http://172.190.72.81:8080/github-webhook/
+      events:
+      - push
+      active: true
+      contentType: json    
         
     #- id: jenkinsFolder
       #name: Create Jenkins Folder
@@ -127,35 +125,35 @@ spec:
         #folder: gcp-gke-cluster
         #job: ${{ parameters.project }}
         
-    #- id: jenkinsJob
-      #name: create jenkins Job
-      #action: jenkins:customjob:create
-      #input:
-        #name : ${{ parameters.project }}
-        #allowedHosts: ['github.com']
-        #repoUrl: ${{ parameters.repoUrl }}
-        #folder: gcp-gke-cluster
-        #job: ${{ parameters.project }}
+  - id: jenkinsJob
+    name: create jenkins Job
+    action: jenkins:customjob:create
+    input:
+      name : ${{ parameters.container_cluster_name }}
+      allowedHosts: ['github.com']
+      repoUrl: ${{ parameters.repoUrl }}
+      folder: gcp-gke-cluster
+      job: ${{ parameters.container_cluster_name }}
         
-    - id: jenkinsRun
-      name: Run Jenkins Job
-      action: jenkins:job:run
-      input:
-        name: int-devops-cloud-0224
-        #allowedHosts: ['github.com']
-        #repoUrl: ${{ parameters.repoUrl }}
-        folder: gcp-gke-cluster
-        job: int-devops-cloud-0224
+  - id: jenkinsRun
+    name: Run Jenkins Job
+    action: jenkins:job:run
+    input:
+      name: ${{ parameters.container_cluster_name }}
+      allowedHosts: ['github.com']
+      repoUrl: ${{ parameters.repoUrl }}
+      folder: gcp-gke-cluster
+      job: ${{ parameters.container_cluster_name }}
           
     # Register the new component in the Backstage catalog
-    - id: register
-      name: Register
-      action: catalog:register
-      input:
-        repoContentsUrl: 'https://github.com/RohanAwasthi/backstage-templates/blob/main/GCP-Cluster/skeleton'
-        catalogInfoPath: 'https://github.com/RohanAwasthi/backstage-templates/blob/main/GCP-Cluster/skeleton/catalog-info.yaml'  # Where the catalog info is stored
+  - id: register
+    name: Register
+    action: catalog:register
+    input:
+      repoContentsUrl: 'https://github.com/RohanAwasthi/backstage-templates/blob/main/GCP-Cluster/skeleton'
+      catalogInfoPath: 'https://github.com/RohanAwasthi/backstage-templates/blob/main/GCP-Cluster/skeleton/catalog-info.yaml'  # Where the catalog info is stored
   # Output links to the user after the template execution
-  output:
+output:
     links:
       - title: Repository
         url: ${{ steps['publish'].output.remoteUrl }}
