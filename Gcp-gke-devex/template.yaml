@@ -1,8 +1,8 @@
 apiVersion: scaffolder.backstage.io/v1beta3
 kind: Template
 metadata:
-  name: aws-ebs-template
-  title: AWS ElasticBeanstalk Template
+  name: gcp-gke-template
+  title: GCP GKE Template
   description: Deploying java/python/nodejs web applications 
   tags:
     - aws
