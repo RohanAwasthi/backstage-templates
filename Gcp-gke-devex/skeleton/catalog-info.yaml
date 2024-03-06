@@ -5,7 +5,7 @@ metadata:
   annotations:
     github.com/project-slug: RohanAwasthi/GCP-Cluster
     jenkins.io/github-folder: 'gcp-gke-cluster/${{ values.container_cluster_name }}'
-  description: GCP gke cluster managed by Terraform
+  description: ${{values.description | dump}}
   tags:
     - gcp
     - gke
