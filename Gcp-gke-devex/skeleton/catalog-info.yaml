@@ -1,9 +1,10 @@
 apiVersion: backstage.io/v1alpha1
 kind: Component
 metadata:
-  name: gke-cluster-devex
+  name: ${{ values.container_cluster_name }}
   annotations:
     github.com/project-slug: RohanAwasthi/GCP-Cluster
+    jenkins.io/github-folder: 'gcp-gke-cluster/${{ values.container_cluster_name }}'
   description: GCP gke cluster managed by Terraform
   tags:
     - gcp
