@@ -1,7 +1,7 @@
 # With node pool config and private endpoint enabled
 container_cluster_name   = "${{ values.container_cluster_name }}"
 location                 = "${{ values.location }}"
-project                  = "${{ values.project }}"
+project                  = "int-devops-cloud-0224"
 #node_locations           = ["us-central1-a", "us-central1-b", "us-central1-c"]
 #deletion_protection      = false
 #network                  = "projects/int-devops-cloud-0224/global/networks/devex-vpc"
