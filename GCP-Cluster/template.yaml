@@ -31,17 +31,17 @@ spec:
           ui:options:
             rows: 5  # Number of rows in the input area
     # Ask the user where they want to store the code
-    - title: Choose a Repo location
-      required:
-        - repoUrl
-      properties:
-        repoUrl:
-          title: Repository Location
-          type: string
-          ui:field: RepoUrlPicker  # A special UI component for selecting repo URLs
-          ui:options:
-            allowedHosts:
-              - github.com  # Allowed hosts for repository
+    # - title: Choose a Repo location
+    #   required:
+    #     - repoUrl
+    #   properties:
+    #     repoUrl:
+    #       title: Repository Location
+    #       type: string
+    #       ui:field: RepoUrlPicker  # A special UI component for selecting repo URLs
+    #       ui:options:
+    #         allowedHosts:
+    #           - github.com  # Allowed hosts for repository
     # Parameters for setting up the EKS cluster
     - title: Basic GKE Cluster Configuration
       required:
