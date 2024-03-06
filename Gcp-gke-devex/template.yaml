@@ -117,7 +117,7 @@ spec:
       name: create jenkins Job
       action: jenkins:job:create
       input:
-        container_cluster_name: ${{ parameters.container_cluster_name }}
+        component_id: ${{ parameters.container_cluster_name }}
         allowedHosts: ['github.com']
         # description: This is ${{ parameters.name }}
         repoUrl: ${{ parameters.repoUrl }}
@@ -142,7 +142,7 @@ spec:
       name: Run Jenkins Job
       action: jenkins:job:run
       input:
-        container_cluster_name: ${{ parameters.container_cluster_name }}
+        component_id: ${{ parameters.container_cluster_name }}
         allowedHosts: ['github.com']
         # description: This is ${{ parameters.name }}
         repoUrl: ${{ parameters.repoUrl }}
