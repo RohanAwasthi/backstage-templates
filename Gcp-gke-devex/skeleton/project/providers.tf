@@ -15,15 +15,15 @@ terraform {
 provider "google" {
   //container_cluster_name = var.container_cluster_name
   //location               = var.location
-  project = var.project
-  //project     = "int-devops-cloud-0224"
+  //project = var.project
+  project     = "int-devops-cloud-0224"
   //credentials = file("/root/credentials.json")
 }
 
 provider "google-beta" {
   //container_cluster_name = var.container_cluster_name
   //location               = var.location
-  project = var.project
-  //project     = "int-devops-cloud-0224"
+  //project = var.project
+  project     = "int-devops-cloud-0224"
   //credentials = file("/root/credentials.json")
 }
