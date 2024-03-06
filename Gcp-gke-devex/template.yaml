@@ -3,31 +3,30 @@ kind: Template
 metadata:
   name: gcp-gke-template
   title: GCP GKE Template
-  description: Deploying java/python/nodejs web applications 
+  description: Deploying GKE cluster
   tags:
-    - aws
-    - java
-    - python
-    - nodejs
-    - webserver
+    - gcp
+    - gke
+    - kubernetes
+    
 spec:
   owner: group:EY
   type: service
   parameters:
-    - title: Provide some simple information
+    - title: Provide project ID
       required:
-        - component_id
+        - project
         - owner
       properties:
-        component_id:
-          title: Name
+        project:
+          title: Project ID
           type: string
-          description: Unique name of the component
+          description: Name of the project
           ui:field: EntityNamePicker
-        description:
-          title: Description
-          type: string
-          description: Help others understand what this website is for.
+        # description:
+        #   title: Description
+        #   type: string
+        #   description: Help others understand what this website is for.
         owner:
           title: Owner
           type: string
@@ -37,10 +36,10 @@ spec:
             allowedKinds:
               - Group
               - User
-        track_id:
-          title: Track ID
-          type: string
-          description: AWS ElasticBeanstalk track ID
+        # track_id:
+        #   title: Track ID
+        #   type: string
+        #   description: AWS ElasticBeanstalk track ID
     - title: Choose a location
       required:
         - repoUrl
@@ -52,25 +51,25 @@ spec:
           ui:options:
             allowedHosts:
               - github.com
-    - title: Runtime Environment
+    - title: Basic GKE Cluster Configuration
       required:
-        - solution_stack_name
-        - application_name
-        - environment_name
+        - container_cluster_name
+        - location
+        - description
       properties:
-        solution_stack_name:
-          title: Solution Stack Name
+        container_cluster_name:
+          title: Cluster Name
           type: string
-          description: Solution Stack Name
+          description: Cluster Name
           pattern: '^([a-z])'
-        application_name:
-          title: application Name
+        location:
+          title: Location name
           type: string
-          description: application Name
-        environment_name:
-          title: environment Name
+          description: location
+        description:
+          title: Description
           type: string
-          description: environment Name
+          description: description
           pattern: '^(?=.{4,40}$)[a-z0-9]+(?:-[a-z0-9]+)*$' #'^[a-z0-9]+(?:-[a-z0-9]+)*$'
 
   steps:
@@ -82,14 +81,14 @@ spec:
         copyWithoutRender:
           - .github/workflows/*
         values:
-          component_id: ${{ parameters.component_id }}
-          description: ${{ parameters.description }}
+          project: ${{ parameters.project }}
+          #description: ${{ parameters.description }}
           destination: ${{ parameters.repoUrl | parseRepoUrl }}
           owner: ${{ parameters.owner }}
-          solution_stack_name: ${{ parameters.solution_stack_name }}
-          application_name: ${{ parameters.application_name }}
-          environment_name: ${{ parameters.environment_name }}
-          track_id: ${{ parameters.track_id }}
+          container_cluster_name: ${{ parameters.container_cluster_name }}
+          location: ${{ parameters.location }}
+          description: ${{ parameters.description }}
+          #track_id: ${{ parameters.track_id }}
 
     - id: publish
       name: Publishing to GitHub
@@ -97,7 +96,7 @@ spec:
       input:
         allowedHosts:
           - github.com
-        description: This is ${{ parameters.component_id }}
+        description: This is ${{ parameters.container_cluster_name }}
         repoUrl: ${{ parameters.repoUrl }}
         repoVisibility: public
         defaultBranch: main
@@ -118,12 +117,12 @@ spec:
       name: create jenkins Job
       action: jenkins:job:create
       input:
-        component_id: ${{ parameters.component_id }}
+        container_cluster_name: ${{ parameters.container_cluster_name }}
         allowedHosts: ['github.com']
         # description: This is ${{ parameters.name }}
         repoUrl: ${{ parameters.repoUrl }}
-        folder: "custom-actions"
-        job: 'tf-${{ parameters.component_id }}'
+        folder: "gcp-gke-cluster"
+        job: 'tf-${{ parameters.container_cluster_name }}'
         track_id: ${{ parameters.track_id }}
         
     # - id: sonarJenkinsJob
@@ -143,12 +142,12 @@ spec:
       name: Run Jenkins Job
       action: jenkins:job:run
       input:
-        component_id: ${{ parameters.component_id }}
+        container_cluster_name: ${{ parameters.container_cluster_name }}
         allowedHosts: ['github.com']
         # description: This is ${{ parameters.name }}
         repoUrl: ${{ parameters.repoUrl }}
-        folder: "custom-actions"
-        job: 'tf-${{ parameters.component_id }}'
+        folder: "gcp-gke-cluster"
+        job: 'tf-${{ parameters.container_cluster_name }}'
 
     # - id: jenkinsRunSonar
     #   name: Run Code Quality Jenkins Job
