@@ -1,7 +1,7 @@
 apiVersion: backstage.io/v1alpha1
 kind: Component
 metadata:
-  name: int-devops-cloud-0224
+  name: gke-cluster-devex
   annotations:
     github.com/project-slug: RohanAwasthi/GCP-Cluster
   description: GCP gke cluster managed by Terraform
