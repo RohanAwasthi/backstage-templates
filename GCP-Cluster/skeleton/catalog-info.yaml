@@ -1,7 +1,7 @@
 apiVersion: backstage.io/v1alpha1
 kind: Component
 metadata:
-  name: ${{parameters.container_cluster_name}}
+  name: gke-cluster-devex
   annotations:
     github.com/project-slug: RohanAwasthi/GCP-Cluster
     jenkins.io/github-folder: 'gcp-gke-cluster/int-devops-cloud-0224'
