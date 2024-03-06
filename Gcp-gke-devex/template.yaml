@@ -3,8 +3,8 @@ apiVersion: scaffolder.backstage.io/v1beta3
 kind: Template
 # Template metadata. Here's your intro to what this template does.
 metadata:
-  name: gke-cluster
-  title: GCP GKE Cluster
+  name: gke-kluster
+  title: GCP GKE Kluster
   description: Deploy GCP GKE Cluster using Terraform
   tags:
     - gcp
