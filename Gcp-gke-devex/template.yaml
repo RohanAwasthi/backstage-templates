@@ -15,10 +15,10 @@ spec:
   parameters:
     - title: Provide project ID
       required:
-        - project
+        - component_id
         - owner
       properties:
-        project:
+        component_id:
           title: Project ID
           type: string
           description: Name of the project
@@ -81,7 +81,7 @@ spec:
         copyWithoutRender:
           - .github/workflows/*
         values:
-          project: ${{ parameters.project }}
+          component_id: ${{ parameters.component_id }}
           #description: ${{ parameters.description }}
           destination: ${{ parameters.repoUrl | parseRepoUrl }}
           owner: ${{ parameters.owner }}
