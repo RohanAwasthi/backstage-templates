@@ -27,8 +27,8 @@ metadata:
     # add elastic beanstalk annotation
     jenkins.io/github-folder: 'custom-actions/tf-${{ values.component_id }}'
     github.com/project-slug: ${{values.destination.owner + "/" + values.destination.repo}}
-    dev.azure.com/project: '/SDAFY24'
-    dev.azure.com/build-definition: '/Pipelines/ey-org.devexplatform'
+    dev.azure.com/project: 'SDAFY24'
+    dev.azure.com/build-definition: 'ey-org.devexplatform'
     backstage.io/techdocs-ref: dir:.
     {%- if (values.solution_stack_name =='java')  %}
     backstage.io/linguist: https://github.com/ItRachii/spring-boot-ebs
