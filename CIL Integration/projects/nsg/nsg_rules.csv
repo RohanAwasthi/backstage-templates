@@ -1,6 +1,0 @@
-nsg_name,rulename,priority,direction,access,protocol,source_port_range,destination_port_range,source_address_prefix,destination_address_prefix
-nsg01,Rule01,100,Inbound,Allow,Tcp,80,*,*,*
-nsg01,Rule02,110,Inbound,Allow,Tcp,443,*,*,*
-nsg02,Rule01,100,Inbound,Allow,Tcp,80,*,*,*
-nsg02,Rule02,110,Inbound,Allow,Tcp,443,*,*,*
-nsg03,Rule01,100,Inbound,Allow,Tcp,80,*,*,*
