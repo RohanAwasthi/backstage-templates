@@ -1,0 +1,17 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: gke-cluster-devex
+  annotations:
+    github.com/project-slug: RohanAwasthi/GCP-Cluster
+    jenkins.io/github-folder: 'gcp-gke-cluster/int-devops-cloud-0224'
+  description: GCP gke cluster managed by Terraform
+  tags:
+    - gcp
+    - gke
+    - terraform
+spec:
+  type: service
+  system: GCP
+  lifecycle: experimental
+  owner: guests
