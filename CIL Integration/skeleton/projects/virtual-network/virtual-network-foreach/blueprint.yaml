@@ -1,0 +1,60 @@
+tosca_definitions_version: cloudify_dsl_1_4
+description: ''
+imports:
+  - cloudify/types/types.yaml
+  - plugin:cloudify-terraform-plugin
+inputs:
+  create_resource_group:
+    type: boolean
+    default: false
+    required: false
+  location:
+    type: string
+    required: true
+  resource_group_name:
+    type: string
+    required: true
+  tags:
+    type: dict
+    default:
+        project: "cil"
+        testing: "webapp"
+    required: false
+  vnet:
+    type: dict
+    required: true
+node_templates:
+  terraform:
+    type: cloudify.nodes.terraform
+    properties:
+      resource_config:
+        installation_source: https://releases.hashicorp.com/terraform/1.5.0/terraform_1.5.0_linux_amd64.zip
+  cloud_resources:
+    type: cloudify.nodes.terraform.Module
+    properties:
+      resource_config:
+        source:
+          location: https://github.com/ey-org/cil2-0-cloudify/archive/refs/heads/feature/mitali.zip
+          username: { get_secret: VirtualNetwork.username }
+          password: { get_secret: VirtualNetwork.password }
+        source_path: projects/virtual-network/virtual-network-foreach
+        variables:
+          create_resource_group: { get_input: create_resource_group }
+          location: { get_input: location }
+          resource_group_name: { get_input: resource_group_name }
+          tags: { get_input: tags }
+          vnet: { get_input: vnet }
+        environment_variables:
+          ARM_SUBSCRIPTION_ID: { get_secret: azure_subscription_id }
+          ARM_CLIENT_ID: { get_secret: azure_client_id }
+          ARM_TENANT_ID: { get_secret: azure_tenant_id }
+          ARM_CLIENT_SECRET: { get_secret: azure_client_secret }
+    relationships:
+      - target: terraform
+        type: cloudify.terraform.relationships.run_on_host
+capabilities:
+  vnet_name_and_vnet_id:
+    value: { get_attribute: [ cloud_resources, outputs, 'vnet_name_and_vnet_id', value ] }
+  vnet_name_and_vnet_guid:
+    value: { get_attribute: [ cloud_resources, outputs, 'vnet_name_and_vnet_guid', value ] }
+  
