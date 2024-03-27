@@ -1,17 +1,16 @@
 apiVersion: backstage.io/v1alpha1
 kind: Component
 metadata:
-  name: gke-cluster-devex
+  name: ${{values.resource_group_name}}
   annotations:
-    github.com/project-slug: RohanAwasthi/GCP-Cluster
-    jenkins.io/github-folder: 'gcp-gke-cluster/int-devops-cloud-0224'
-  description: GCP gke cluster managed by Terraform
+    github.com/project-slug: 'RohanAwasthi/CIL Integration'
+    jenkins.io/github-folder: 'new-folder/${{ parameters.resource_group_name }}'
+  description: Resource group creation by backstage
   tags:
-    - gcp
-    - gke
+    - azure
     - terraform
 spec:
   type: service
-  system: GCP
+  system: Azure
   lifecycle: experimental
   owner: guests
