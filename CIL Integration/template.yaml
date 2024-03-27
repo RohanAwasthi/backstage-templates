@@ -5,6 +5,10 @@ metadata:
   name: Resource-group
   title: Resource Group in Azure
   description: Creates a resource group in Azure, if not already created.
+  tags:
+    - azure
+    - resource group
+    - terraform
 # The specification for how the template behaves
 spec:
   # Who owns this template. Generally, it could be a team or individual
@@ -22,15 +26,20 @@ spec:
         - tags
       properties:
         create_resource_group:
+          title: Create resource group
           type: boolean
+          description: Do you want to create resource group ?
           default: false
           required: false
         location:
+          title: Location.
           type: string
           default: null
           required: false
         resource_group_name:
+          title: Resource group name
           type: string
+          description: Name of your resource group
           required: true
         tags:
           type: dict
