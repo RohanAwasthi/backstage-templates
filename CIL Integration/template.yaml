@@ -5,10 +5,6 @@ metadata:
   name: Resource-group
   title: Resource Group in Azure
   description: Creates a resource group in Azure, if not already created.
-  tags:
-    - azure
-    - resource group
-    - terraform
 # The specification for how the template behaves
 spec:
   # Who owns this template. Generally, it could be a team or individual
