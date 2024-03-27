@@ -104,7 +104,7 @@ spec:
       input:
         allowedHosts:
           - github.com
-        description: This is ${{ parameters.create_resource_group }}
+        description: This is ${{ parameters.resource_group_name }}
         repoUrl: ${{ parameters.repoUrl }}
         repoVisibility: public
         defaultBranch: main
@@ -125,12 +125,12 @@ spec:
       name: create jenkins Job
       action: jenkins:job:create
       input:
-        component_id: ${{ parameters.create_resource_group }}
+        component_id: ${{ parameters.resource_group_name }}
         allowedHosts: ['github.com']
         # description: This is ${{ parameters.name }}
         repoUrl: ${{ parameters.repoUrl }}
         folder: "new-folder"
-        job: '${{ parameters.create_resource_group }}'
+        job: '${{ parameters.resource_group_name }}'
        # track_id: ${{ parameters.track_id }}
 
 
@@ -138,12 +138,12 @@ spec:
       name: Run Jenkins Job
       action: jenkins:job:run
       input:
-        component_id: ${{ parameters.create_resource_group }}
+        component_id: ${{ parameters.resource_group_name }}
         allowedHosts: ['github.com']
         # description: This is ${{ parameters.name }}
         repoUrl: ${{ parameters.repoUrl }}
         folder: "new-folder"
-        job: '${{ parameters.create_resource_group }}'
+        job: '${{ parameters.resource_group_name }}'
 
 
     - id: register
