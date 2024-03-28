@@ -22,15 +22,20 @@ spec:
         - tags
       properties:
         create_resource_group:
+          title: Create resource group
           type: boolean
+          description: Do you want to create resource group ?
           default: false
           required: false
         location:
+          title: Location.
           type: string
           default: null
           required: false
         resource_group_name:
+          title: Resource group name
           type: string
+          description: Name of your resource group
           required: true
         tags:
           type: dict
@@ -38,7 +43,7 @@ spec:
               project: "cil"
               testing: "webapp"
           required: false
-    # Ask the user where they want to store the code
+    # # Ask the user where they want to store the code
     # - title: Choose a Repo location
     #   required:
     #     - repoUrl
@@ -104,7 +109,7 @@ spec:
     #   input:
     #     allowedHosts:
     #       - github.com
-    #     description: This is ${{ parameters.create_resource_group }}
+    #     description: This is ${{ parameters.resource_group_name }}
     #     repoUrl: ${{ parameters.repoUrl }}
     #     repoVisibility: public
     #     defaultBranch: main
@@ -125,12 +130,12 @@ spec:
       name: create jenkins Job
       action: jenkins:job:create
       input:
-        component_id: ${{ parameters.create_resource_group }}
+        component_id: ${{ parameters.resource_group_name }}
         allowedHosts: ['github.com']
         # description: This is ${{ parameters.name }}
         repoUrl: ${{ parameters.repoUrl }}
         folder: "new-folder"
-        job: '${{ parameters.create_resource_group }}'
+        job: '${{ parameters.resource_group_name }}'
        # track_id: ${{ parameters.track_id }}
 
 
@@ -138,20 +143,20 @@ spec:
       name: Run Jenkins Job
       action: jenkins:job:run
       input:
-        component_id: ${{ parameters.create_resource_group }}
+        component_id: ${{ parameters.resource_group_name }}
         allowedHosts: ['github.com']
         # description: This is ${{ parameters.name }}
         repoUrl: ${{ parameters.repoUrl }}
         folder: "new-folder"
-        job: '${{ parameters.create_resource_group }}'
+        job: '${{ parameters.resource_group_name }}'
 
 
     - id: register
       name: Registering Component
       action: catalog:register
       input:
-        repoContentsUrl: 'https://github.com/ey-org/cil2-0-cloudify/edit/feature/mitali/devex-cil-templates/resource-group'
-        catalogInfoPath: "https://github.com/ey-org/cil2-0-cloudify/edit/feature/mitali/devex-cil-templates/resource-group/catalog-info.yaml"
+        repoContentsUrl: 'https://github.com/RohanAwasthi/backstage-templates/tree/main/CIL%20Integration/skeleton'
+        catalogInfoPath: "https://github.com/RohanAwasthi/backstage-templates/edit/main/CIL%20Integration/catalog-info.yaml"
 
   output:
     links:
