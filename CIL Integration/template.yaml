@@ -22,20 +22,15 @@ spec:
         - tags
       properties:
         create_resource_group:
-          title: Create resource group
           type: boolean
-          description: Do you want to create resource group ?
           default: false
           required: false
         location:
-          title: Location.
           type: string
           default: null
           required: false
         resource_group_name:
-          title: Resource group name
           type: string
-          description: Name of your resource group
           required: true
         tags:
           type: dict
@@ -44,98 +39,98 @@ spec:
               testing: "webapp"
           required: false
     # Ask the user where they want to store the code
-    - title: Choose a Repo location
-      required:
-        - repoUrl
-      properties:
-        repoUrl:
-          title: Repository Location
-          type: string
-          ui:field: RepoUrlPicker  # A special UI component for selecting repo URLs
-          ui:options:
-            allowedHosts:
-              - github.com  # Allowed hosts for repository
+    # - title: Choose a Repo location
+    #   required:
+    #     - repoUrl
+    #   properties:
+    #     repoUrl:
+    #       title: Repository Location
+    #       type: string
+    #       ui:field: RepoUrlPicker  # A special UI component for selecting repo URLs
+    #       ui:options:
+    #         allowedHosts:
+    #           - github.com  # Allowed hosts for repository
     # Parameters for setting up the EKS cluster
-    - title: Cloud Resources
-      required:
-        - ARM_SUBSCRIPTION_ID
-        - ARM_CLIENT_ID
-        - ARM_TENANT_ID
-        - ARM_CLIENT_SECRET
-      properties:
-        ARM_SUBSCRIPTION_ID:
-          title: Azure Subscription ID
-          type: string
-          description: Write azure subscription ID.
-          ui:autofocus: true
-        ARM_CLIENT_ID:
-          title: Client ID
-          type: string
-          description: Write down the Client ID.
-          ui:autofocus: true
-        ARM_TENANT_ID:
-          title: Azure tenant ID
-          type: string
-          description: Tenant ID
-          ui:autofocus: true
-        ARM_CLIENT_SECRET:
-          title: Client Secret ID
-          type: string
-          description: Client Secret 
-          ui:autofocus: true
+    # - title: Cloud Resources
+    #   required:
+    #     - ARM_SUBSCRIPTION_ID
+    #     - ARM_CLIENT_ID
+    #     - ARM_TENANT_ID
+    #     - ARM_CLIENT_SECRET
+    #   properties:
+    #     ARM_SUBSCRIPTION_ID:
+    #       title: Azure Subscription ID
+    #       type: string
+    #       description: Write azure subscription ID.
+    #       ui:autofocus: true
+    #     ARM_CLIENT_ID:
+    #       title: Client ID
+    #       type: string
+    #       description: Write down the Client ID.
+    #       ui:autofocus: true
+    #     ARM_TENANT_ID:
+    #       title: Azure tenant ID
+    #       type: string
+    #       description: Tenant ID
+    #       ui:autofocus: true
+    #     ARM_CLIENT_SECRET:
+    #       title: Client Secret ID
+    #       type: string
+    #       description: Client Secret 
+    #       ui:autofocus: true
 
   steps:
-    - id: template
-      name: Fetching Template
-      action: fetch:template
-      input:
-        url: ./skeleton
-        copyWithoutRender:
-          - .github/workflows/*
-        values:
-          create_resource_group: ${{ parameters.create_resource_group }}
-          resource_group_name: ${{ parameters.resource_group_name }}
-          destination: ${{ parameters.repoUrl | parseRepoUrl }}
-          ARM_SUBSCRIPTION_ID: ${{ parameters.ARM_SUBSCRIPTION_ID }}
-          ARM_CLIENT_ID: ${{ parameters.ARM_CLIENT_ID }}
-          location: ${{ parameters.location }}
-          ARM_TENANT_ID: ${{ parameters.ARM_TENANT_ID }}
-          ARM_CLIENT_SECRET: ${{ parameters.ARM_CLIENT_SECRET }}
+    # - id: template
+    #   name: Fetching Template
+    #   action: fetch:template
+    #   input:
+    #     url: ./skeleton
+    #     copyWithoutRender:
+    #       - .github/workflows/*
+    #     values:
+    #       create_resource_group: ${{ parameters.create_resource_group }}
+    #       resource_group_name: ${{ parameters.resource_group_name }}
+    #       destination: ${{ parameters.repoUrl | parseRepoUrl }}
+    #       ARM_SUBSCRIPTION_ID: ${{ parameters.ARM_SUBSCRIPTION_ID }}
+    #       ARM_CLIENT_ID: ${{ parameters.ARM_CLIENT_ID }}
+    #       location: ${{ parameters.location }}
+    #       ARM_TENANT_ID: ${{ parameters.ARM_TENANT_ID }}
+    #       ARM_CLIENT_SECRET: ${{ parameters.ARM_CLIENT_SECRET }}
           
 
-    - id: publish
-      name: Publishing to GitHub
-      action: publish:github
-      input:
-        allowedHosts:
-          - github.com
-        description: This is ${{ parameters.resource_group_name }}
-        repoUrl: ${{ parameters.repoUrl }}
-        repoVisibility: public
-        defaultBranch: main
+    # - id: publish
+    #   name: Publishing to GitHub
+    #   action: publish:github
+    #   input:
+    #     allowedHosts:
+    #       - github.com
+    #     description: This is ${{ parameters.create_resource_group }}
+    #     repoUrl: ${{ parameters.repoUrl }}
+    #     repoVisibility: public
+    #     defaultBranch: main
 
-    - id: webhook
-      name: Adding webhook to Github Respository
-      action: github:webhook
-      input: 
-        repoUrl: ${{ parameters.repoUrl }}
-        webhookUrl: http://10.1.0.228:8080/github-webhook/
-        #webhookUrl: http://172.190.72.81:8080/github-webhook/
-        events:
-        - push
-        active: true
-        contentType: json 
+    # - id: webhook
+    #   name: Adding webhook to Github Respository
+    #   action: github:webhook
+    #   input: 
+    #     repoUrl: ${{ parameters.repoUrl }}
+    #     webhookUrl: http://10.1.0.228:8080/github-webhook/
+    #     #webhookUrl: http://172.190.72.81:8080/github-webhook/
+    #     events:
+    #     - push
+    #     active: true
+    #     contentType: json 
 
     - id: jenkinsJob
       name: create jenkins Job
       action: jenkins:job:create
       input:
-        component_id: ${{ parameters.resource_group_name }}
+        component_id: ${{ parameters.create_resource_group }}
         allowedHosts: ['github.com']
         # description: This is ${{ parameters.name }}
         repoUrl: ${{ parameters.repoUrl }}
         folder: "new-folder"
-        job: '${{ parameters.resource_group_name }}'
+        job: '${{ parameters.create_resource_group }}'
        # track_id: ${{ parameters.track_id }}
 
 
@@ -143,20 +138,20 @@ spec:
       name: Run Jenkins Job
       action: jenkins:job:run
       input:
-        component_id: ${{ parameters.resource_group_name }}
+        component_id: ${{ parameters.create_resource_group }}
         allowedHosts: ['github.com']
         # description: This is ${{ parameters.name }}
         repoUrl: ${{ parameters.repoUrl }}
         folder: "new-folder"
-        job: '${{ parameters.resource_group_name }}'
+        job: '${{ parameters.create_resource_group }}'
 
 
     - id: register
       name: Registering Component
       action: catalog:register
       input:
-        repoContentsUrl: ${{ steps.publish.output.repoContentsUrl }}
-        catalogInfoPath: "/catalog-info.yaml"
+        repoContentsUrl: 'https://github.com/ey-org/cil2-0-cloudify/edit/feature/mitali/devex-cil-templates/resource-group'
+        catalogInfoPath: "https://github.com/ey-org/cil2-0-cloudify/edit/feature/mitali/devex-cil-templates/resource-group/catalog-info.yaml"
 
   output:
     links:
