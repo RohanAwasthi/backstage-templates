@@ -1,5 +1,5 @@
 resource "azurerm_network_interface" "terra-demo" {
-  name                = "terra-nic"
+  name                = "${{ values.component_id }}"
   location            = azurerm_resource_group.terra-demo.location
   resource_group_name = azurerm_resource_group.terra-demo.name
 
