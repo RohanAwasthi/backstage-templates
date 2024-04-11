@@ -1,4 +1,4 @@
-resource "azurerm_virtual_network" "terra-demo" {
+/* resource "azurerm_virtual_network" "terra-demo" {
   name                = "terra-vnet"
   address_space       = ["10.0.0.0/16"]
   location            = azurerm_resource_group.terra-demo.location
@@ -22,4 +22,4 @@ resource "azurerm_public_ip" "terra-demo" {
     tags = {
     environment = "Production"
   }
-}
+} */
