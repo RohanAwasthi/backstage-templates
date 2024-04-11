@@ -5,9 +5,10 @@ resource "azurerm_network_interface" "terra-demo" {
 
   ip_configuration {
     name                          = "internal"
-    subnet_id                     = azurerm_subnet.terra-demo.id
+    #subnet_id                     = azurerm_subnet.terra-demo.id
+    subnet_id                     = USEPSBXDNTSBN01
     private_ip_address_allocation = "Dynamic"
-    public_ip_address_id          = azurerm_public_ip.terra-demo.id
+    #public_ip_address_id          = azurerm_public_ip.terra-demo.id
   }
 }
 
