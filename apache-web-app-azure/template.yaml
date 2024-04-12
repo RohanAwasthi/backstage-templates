@@ -157,24 +157,24 @@ spec:
           # instance_key: ${{ parameters.instance_key }}
           # ApplicationType: ${{parameters.ApplicationType}}
 
-    - id: publish
-      name: Publishing to GitHub
-      action: publish:github
-      input:
-        allowedHosts:
-          - github.com
-        description: This is ${{ parameters.component_id }}
-        repoUrl: ${{ parameters.repoUrl }}
-        repoVisibility: public
-        defaultBranch: main
+    # - id: publish
+    #   name: Publishing to GitHub
+    #   action: publish:github
+    #   input:
+    #     allowedHosts:
+    #       - github.com
+    #     description: This is ${{ parameters.component_id }}
+    #     repoUrl: ${{ parameters.repoUrl }}
+    #     repoVisibility: public
+    #     defaultBranch: main
 
     - id: webhook
       name: Adding webhook to Github Respository
       action: github:webhook
       input: 
         repoUrl: ${{ parameters.repoUrl }}
-        # webhookUrl: http://10.1.0.228:8080/github-webhook/
-        webhookUrl: http://172.190.72.81:8080/github-webhook/
+        webhookUrl: http://10.1.0.228:8080/github-webhook/
+        #webhookUrl: http://172.190.72.81:8080/github-webhook/
         events:
         - push
         active: true
