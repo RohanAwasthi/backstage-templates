@@ -9,8 +9,7 @@ resource "azurerm_network_interface" "terra-demo" {
   ip_configuration {
     name                          = "internal"
     #subnet_id                     = azurerm_subnet.terra-demo.id
-     subnet_id = "/subscriptions/200c7489-b327-42c4-b931-85c9259878ae/resourceGroups/fs-det-DevExSDAGroup/providers/Microsoft.Network/virtualNetworks/DevEX-VM-vnet/subnets/
-Devex-vm-subnet"
+     subnet_id = "/subscriptions/200c7489-b327-42c4-b931-85c9259878ae/resourceGroups/fs-det-DevExSDAGroup/providers/Microsoft.Network/virtualNetworks/DevEX-VM-vnet/subnets/Devex-vm-subnet"
 
 
     private_ip_address_allocation = "Dynamic"
