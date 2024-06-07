@@ -3,7 +3,7 @@ resource "azurerm_network_interface" "terra-demo" {
   #location            = azurerm_resource_group.terra-demo.location
   location            = "east us"
  # resource_group_name = azurerm_resource_group.terra-demo.name
-  resource_group_name =  "fs-det-DevExSDAGroup"
+  resource_group_name =  "Devex-Apachewebapp-rg"
 
 
   ip_configuration {
@@ -21,7 +21,7 @@ resource "azurerm_linux_virtual_machine" "terra-demo" {
   name                = "${{ values.component_id }}"
   # name                = "terra-machine01-.NET"
   #resource_group_name = azurerm_resource_group.terra-demo.name
-  resource_group_name =  "fs-det-DevExSDAGroup"
+  resource_group_name =  "Devex-Apachewebapp-rg"
   #location            = azurerm_resource_group.terra-demo.location
   location            = "east us"
   # size                = ${{ values.vm_size }}
