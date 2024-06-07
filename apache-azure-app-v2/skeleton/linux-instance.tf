@@ -3,13 +3,14 @@ resource "azurerm_network_interface" "terra-demo" {
   #location            = azurerm_resource_group.terra-demo.location
   location            = "east us"
  # resource_group_name = azurerm_resource_group.terra-demo.name
-  resource_group_name =  "Devex-Apachewebapp-rg"
+  resource_group_name =  "fs-det-DevExSDAGroup"
 
 
   ip_configuration {
     name                          = "internal"
     #subnet_id                     = azurerm_subnet.terra-demo.id
-     subnet_id = "/subscriptions/181821eb-6bc1-41fa-bba6-5bfecf56c48f/resourceGroups/Devex-Apachewebapp-rg/providers/Microsoft.Network/virtualNetworks/Devex-Apachewebapp-vnet/subnets/Devex-Apachewebapp-subnet"
+     subnet_id = "/subscriptions/200c7489-b327-42c4-b931-85c9259878ae/resourceGroups/fs-det-DevExSDAGroup/providers/Microsoft.Network/virtualNetworks/DevEX-VM-vnet/subnets/
+Devex-vm-subnet"
 
 
     private_ip_address_allocation = "Dynamic"
@@ -21,7 +22,7 @@ resource "azurerm_linux_virtual_machine" "terra-demo" {
   name                = "${{ values.component_id }}"
   # name                = "terra-machine01-.NET"
   #resource_group_name = azurerm_resource_group.terra-demo.name
-  resource_group_name =  "Devex-Apachewebapp-rg"
+  resource_group_name =  "fs-det-DevExSDAGroup"
   #location            = azurerm_resource_group.terra-demo.location
   location            = "east us"
   # size                = ${{ values.vm_size }}
