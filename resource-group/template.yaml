@@ -1,0 +1,107 @@
+apiVersion: scaffolder.backstage.io/v1beta3
+kind: Template
+metadata:
+  name: create-Azure-VM
+  title: Create a Resource Group
+  description: Create an Azure Resource group
+  tags: ['recommended']
+spec:
+  owner: guests
+  type: service
+  parameters:
+    - title: Resource Group Creation
+      required:
+         - Name
+         - Location
+         - Tags
+      properties:
+        Name:
+          title: Resource Group Name.
+          type: string
+          description: Name of the resource group to be created.
+          ui:autofocus: true
+          ui:options:
+            rows: 5
+
+        Location:
+          title:  Azure Region
+          type: string
+          description: Name of the region where you want to create your Resource Group.
+        
+        Tags:
+          title:  Resource Tags
+          type: map(any)
+          description: Name of the region where you want to create your Resource Group.
+            
+
+        action:
+          title: action
+          type: string
+          description: What action do you want to perform? Create or delete?
+          enum:
+            - apply
+            - destroy
+
+    - title: Choose a Repository Location
+      required:
+        - repoUrl
+      properties:
+        repoUrl:
+          title: Location of the repository
+          type: string
+          ui:field: RepoUrlPicker
+          ui:options:
+            allowedHosts:
+              - github.com
+
+  steps:
+# Getting the all the files/details from the template
+    - id: fetch-base
+      name: Fetching Details from content folder
+      action: fetch:template
+      input:
+        url: ./content  # Location of the content directory where catlog-info.yaml file is present for the template
+        values:
+          name: ${{ parameters.Name }}
+
+# Publish the content of the current working directory to our github directory
+    - id: publish
+      name: Publishing Details
+      action: publish:github
+      input:
+        allowedHosts: ['github.com']
+        description: This repo is to create the Resource Group ${{ parameters.Name }} using backstage.
+        repoUrl: ${{ parameters.repoUrl }}
+        repoVisibility: private # or 'internal' or 'private'
+        # defaultBranch: master
+
+# Triggering CI-CD to create resource in our case github action. 
+    - id: github-action
+      name: Starting GitHub action
+      action: github:actions:dispatch
+      input:
+        workflowId:  terraform.yml # ID of GitHub action WorkFlow
+        repoUrl: 'https://github.com/IN010M50751_EYGS/devex_hari'
+        branchOrTagName: 'develop'
+        workflowInputs:
+          Name: ${{ parameters.Name }}
+          Location: ${{ parameters.Location }}
+          Tags: ${{ parameters.Tags }}
+          action: ${{ parameters.action }}
+
+# Registering new component in the catalog of backstage.
+    - id: register
+      name: Registering the new Component 
+      action: catalog:register
+      input:
+        repoContentsUrl: ${{steps['publish'].output.repoContentsUrl }}
+        catalogInfoPath: '/component-info.yaml' # where the info of the catalog is stored.
+
+# Output links  are displayed to the user after the template execution.
+  output:
+    links:
+      - title: Repository
+        url: ${{ steps['publish'].output.remoteUrl }}
+      - title: Open in catalog
+        icon: catalog
+        entityRef: ${{ steps['register'].output.entityRef }}
