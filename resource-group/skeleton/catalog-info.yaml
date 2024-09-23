@@ -1,0 +1,17 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: create-Azure-VM
+  annotations:
+    github.com/project-slug: RohanAwasthi/resource-group
+    jenkins.io/github-folder: 'resource-group/${{ parameters.Name }}'
+  description: Azure resource-group managed by Terraform
+  tags:
+    - azure
+    - resource-group
+    - terraform
+spec:
+  type: service
+  system: Azure
+  lifecycle: experimental
+  owner: guests
