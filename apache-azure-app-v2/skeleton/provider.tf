@@ -9,6 +9,7 @@ terraform {               //for log in ssh azureuser@publicip
 
 # Configure the Microsoft Azure Provider
 provider "azurerm" {
+  skip_provider_registration = true
   
   features {}
   //subscription_id = ""
