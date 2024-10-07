@@ -1,5 +1,5 @@
 #!/bin/bash
-cd infra
+
 repo_name=$(git config --get remote.origin.url | sed 's/.*\///;s/.git$//')
 
 az login --service-principal -u $CID -p $CSECRET --tenant $TID
