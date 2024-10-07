@@ -259,7 +259,7 @@ spec:
           - github.com
         description: This is ${{ parameters.component_id }}
         repoUrl: ${{ parameters.repoUrl }}
-        repoVisibility: private
+        repoVisibility: public
         branchName: infra
         targetBranch: main
         title: "Initial commit"
