@@ -197,12 +197,12 @@ spec:
           - github.com
         description: This is ${{ parameters.component_id }}
         repoUrl: ${{ parameters.repoUrl }}
-        repoVisibility: private
+        repoVisibility: public
         defaultBranch: main
         # protectDefaultBranch: false
         collaborators: ${{ parameters.collaborators }}
 
-    - id: template2
+    - id: infra-template
       name: Fetching Template2
       action: fetch:template
       input:
