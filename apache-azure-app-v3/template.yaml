@@ -1,0 +1,320 @@
+apiVersion: scaffolder.backstage.io/v1beta3
+kind: Template
+metadata:
+  name: apache-azure-web-app-V3
+  title: Apache Azure Terraform Template- V3
+  description: Simple apache web app hosted on Web App Service in Azure
+  tags:
+    - apache
+    - azure
+    - "applicationtype-webapplication"
+spec:
+  owner: group:EY
+  type: service
+  parameters:
+    - title: Basic Information
+      required:
+        - component_id
+        - owner
+      properties:
+        component_id:
+          title: Name
+          type: string
+          description: Unique name of the component
+          ui:field: EntityNamePicker
+        description:
+          title: Description
+          type: string
+          description: Help others understand what this website is for.
+        owner:
+          title: Owner
+          type: string
+          description: Owner of the component
+          ui:field: OwnerPicker
+          ui:options:
+            allowedKinds:
+              - Group
+              - User
+    - title: Source Code Manangement
+      required:
+        - repoUrl
+      properties:
+        repoUrl:
+          title: Repository Location
+          type: string
+          ui:field: RepoUrlPicker
+          ui:options:
+            allowedHosts:
+              - github.com
+        collaborators:
+          type: array
+          items:
+            type: 'object'
+            required: ['user', 'access']
+            properties:
+              access:
+                type: 'string'
+                description: 'The type of access for the user'
+                enum: ['push', 'pull', 'admin', 'maintain', 'triage']
+              user:
+                type: 'string'
+                description: 'The username or group'
+    # - title: Configure Azure
+    #   required:
+    #     - subscription_id
+    #   properties:
+    #     subscription_id:
+    #       title: Subscription ID
+    #       type: string
+    #       description: Azure subscription ID
+    # - title: Configure Azure Resource Group
+    #   required:
+    #     - rg_name
+    #     - rg_location
+    #   properties:
+    #     rg_name:
+    #       title: Resource Group Name
+    #       type: string
+    #       description: Azure resource group name
+    #     rg_location:
+    #       title: Resource Group Location
+    #       type: string
+    #       description: Azure resource group Location
+    # - title: Azure Virtual Network Details
+    #   required:
+    #     - vnet_name
+    #     - vnet_address_space
+    #   properties:
+    #     vnet_name:
+    #       title: VNet Name
+    #       type: string
+    #       description: Azure VNet name
+    #     vnet_address_space:
+    #       title: VNet CIDR
+    #       type: string
+    #       description: Azure VNet IPv4 CIDR
+    # - title: Azure Subnet Details
+    #   required:
+    #     - subnet_name
+    #     - subnet_address_prefixes
+    #   properties:
+    #     subnet_name:
+    #       title: Subnet Name
+    #       type: string
+    #       description: Subnet name
+    #     subnet_address_prefixes:
+    #       title: Subnet CIDR
+    #       type: string
+    #       description: Subnet's IPv4 CIDR
+    - title: Resource Configuration
+      required:
+        # - vm_name
+        - sku_name
+        # - vm_admin_username
+        - os_type
+      properties:
+        # vm_name:
+        #   title: azure Instance Name
+        #   type: string
+        #   description: Name of azure instance
+        sku_name:
+          title: Pricing Tier
+          type: string
+          description: App Service plan pricing tier determines the location, features, cost and compute resources associated with your app.
+          enum:
+            - B1
+            - B2
+            - B3
+            - D1
+            - P1V2
+            - P2V2
+            - P3V2
+          enumNames:
+            - Basic B1
+            - Basic B2
+            - Basic B3
+            - Dev/Test
+            - Premium v2 P1V2
+            - Premium v2 P2V2
+            - Premium v2 P3V2
+        # vm_admin_username:
+        #   title: azure Instance Admin Username
+        #   type: string
+        #   description: Admin username of azure instance
+        os_type:
+          title: Operating System
+          type: string
+          description: The O/S type for the App Services to be hosted in this plan. Possible values include Windows, Linux
+          enum:
+            - Windows
+            - Linux
+    # - title:  Instance Key
+    #   required:
+    #     - instance_key
+    #   properties:
+    #     instance_key:
+    #       title: Instance Key
+    #       type: string
+    #       description: Key pair
+    # - title: Tags
+    #   required:
+    #     - ApplicationType
+    #   properties:
+    #     - ApplicationType:
+    #       title: Application Type
+    #       type: string
+    #       description: The type of application
+  steps:
+    - id: template
+      name: Fetching Template
+      action: fetch:template
+      input:
+        url: ./skeleton
+        copyWithoutRender:
+          - .github/workflows/*
+        values:
+          component_id: ${{ parameters.component_id }}
+          description: ${{ parameters.description }}
+          destination: ${{ parameters.repoUrl | parseRepoUrl }}
+          owner: ${{ parameters.owner }}
+          # subscription_id: ${{ parameters.subscription_id }}
+          # rg_location: ${{ parameters.rg_location }}
+          # rg_name: ${{ parameters.rg_name }}
+          # vnet_name: ${{ parameters.vnet_name }}
+          # vnet_address_space: ${{ parameters.vnet_address_space }}
+          # subnet_name: ${{ parameters.subnet_name }}
+          # subnet_address_prefixes: ${{ parameters.subnet_address_prefixes }}
+          os_type: ${{ parameters.os_type }}
+          sku_name: ${{ parameters.sku_name }}
+          # instance_key: ${{ parameters.instance_key }}
+          # ApplicationType: ${{parameters.ApplicationType}}
+
+    - id: publish
+      name: Publishing to GitHub
+      action: publish:github
+      input:
+        allowedHosts:
+          - github.com
+        description: This is ${{ parameters.component_id }}
+        repoUrl: ${{ parameters.repoUrl }}
+        repoVisibility: private
+        defaultBranch: main
+        # protectDefaultBranch: false
+        collaborators: ${{ parameters.collaborators }}
+
+    - id: template2
+      name: Fetching Template2
+      action: fetch:template
+      input:
+        url: ./infra
+        targetPath: infra
+        copyWithoutRender:
+          - .github/workflows/*
+        values:
+          component_id: ${{ parameters.component_id }}
+          description: ${{ parameters.description }}
+          destination: ${{ parameters.repoUrl | parseRepoUrl }}
+          owner: ${{ parameters.owner }}
+          # subscription_id: ${{ parameters.subscription_id }}
+          # rg_location: ${{ parameters.rg_location }}
+          # rg_name: ${{ parameters.rg_name }}
+          # vnet_name: ${{ parameters.vnet_name }}
+          # vnet_address_space: ${{ parameters.vnet_address_space }}
+          # subnet_name: ${{ parameters.subnet_name }}
+          # subnet_address_prefixes: ${{ parameters.subnet_address_prefixes }}
+          os_type: ${{ parameters.os_type }}
+          sku_name: ${{ parameters.sku_name }}
+          # instance_key: ${{ parameters.instance_key }}
+          # ApplicationType: ${{parameters.ApplicationType}}
+
+    # - id: publish2
+    #   name: Publishing to GitHub2
+    #   action: github:repo:push
+    #   input:
+    #     allowedHosts:
+    #       - github.com
+    #     description: This is ${{ parameters.component_id }}
+    #     repoUrl: ${{ parameters.repoUrl }}
+    #     repoVisibility: private
+    #     defaultBranch: infra
+    #     collaborators: ${{ parameters.collaborators }}
+
+    # - id: publish2
+    #   name: Publishing to GitHub2
+    #   action: github:repo:push
+    #   input:
+    #     allowedHosts:
+    #       - github.com
+    #     description: This is ${{ parameters.component_id }}
+    #     repoUrl: ${{ parameters.repoUrl }}
+    #     repoVisibility: private
+    #     defaultBranch: infra
+    #     collaborators: ${{ parameters.collaborators }}
+
+    - id: infra-publish
+      name: Publishing to GitHub
+      action: publish:github:pull-request
+      input:
+        allowedHosts:
+          - github.com
+        description: This is ${{ parameters.component_id }}
+        repoUrl: ${{ parameters.repoUrl }}
+        repoVisibility: private
+        branchName: infra
+        targetBranch: main
+        title: "Initial commit"
+
+    # - id: webhook
+    #   name: Adding webhook to Github Respository
+    #   action: github:webhook
+    #   input: 
+    #     repoUrl: ${{ parameters.repoUrl }}
+    #     # webhookUrl: http://10.1.0.228:8080/github-webhook/
+    #     webhookUrl: http://172.190.72.81:8080/github-webhook/
+    #     events:
+    #     - push
+    #     active: true
+    #     contentType: json 
+        
+    - id: jenkinsFolder
+      name: Create Jenkins Folder
+      action: jenkins:folder:create
+      input:
+        repoUrl: ${{ parameters.repoUrl }}
+        folder: apache-azure-app2
+        job: ${{ parameters.component_id }}
+        
+    - id: jenkinsJob
+      name: create jenkins Job
+      action: jenkins:customjob:create
+      input:
+        component_id: ${{ parameters.component_id }}
+        allowedHosts: ['github.com']
+        repoUrl: ${{ parameters.repoUrl }}
+        folder: apache-azure-app2
+        job: ${{ parameters.component_id }}
+        
+    - id: jenkinsRun
+      name: Run Jenkins Job
+      action: jenkins:job:run
+      input:
+        component_id: ${{ parameters.component_id }}
+        allowedHosts: ['github.com']
+        repoUrl: ${{ parameters.repoUrl }}
+        folder: apache-azure-app
+        job: ${{ parameters.component_id }}
+        
+    - id: register
+      name: Register
+      action: catalog:register
+      input:
+        repoContentsUrl: ${{ steps.publish.output.repoContentsUrl }}
+        catalogInfoPath: "/catalog-info.yaml"
+        
+  output:
+    links:
+      - title: Repository
+        url: ${{ steps.publish.output.remoteUrl }}
+      - title: Open in catalog
+        icon: catalog
+        entityRef: ${{ steps.register.output.entityRef }}
