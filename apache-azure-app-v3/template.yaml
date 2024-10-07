@@ -202,12 +202,20 @@ spec:
         # protectDefaultBranch: false
         collaborators: ${{ parameters.collaborators }}
 
+    - id: delete-files
+      name: Remove excluded files
+      action: fs:delete
+      input:
+        files:
+            - Jenkinfile
+            - catalog-info.yaml  
+
     - id: infra-template
       name: Fetching Template2
       action: fetch:template
       input:
         url: ./infra
-        targetPath: infra
+        #targetPath: infra
         copyWithoutRender:
           - .github/workflows/*
         values:
@@ -301,7 +309,7 @@ spec:
         component_id: ${{ parameters.component_id }}
         allowedHosts: ['github.com']
         repoUrl: ${{ parameters.repoUrl }}
-        folder: apache-azure-app
+        folder: apache-azure-app2
         job: ${{ parameters.component_id }}
         
     - id: register
