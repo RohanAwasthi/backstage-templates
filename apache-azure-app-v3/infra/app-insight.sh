@@ -4,7 +4,7 @@ webAppName='${{ values.component_id }}'
 resourceGroupName='devex-${{ values.component_id }}-rg'
 appName='${{ values.component_id }}'
 location="eastus"
-
+az login --service-principal -u $CID -p $CSECRET --tenant $TID
 appInsights=$(az monitor app-insights component create \
   --app $appName \
   --location $location \
