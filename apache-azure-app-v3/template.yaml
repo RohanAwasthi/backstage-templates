@@ -46,6 +46,8 @@ spec:
           ui:options:
             allowedHosts:
               - github.com
+            allowedOwners:
+              - RohanAwasthi
         collaborators:
           type: array
           items:
