@@ -211,7 +211,7 @@ spec:
             - catalog-info.yaml  
 
     - id: infra-template
-      name: Fetching Template2
+      name: Fetching Infra Template
       action: fetch:template
       input:
         url: ./infra
@@ -260,7 +260,7 @@ spec:
     #     collaborators: ${{ parameters.collaborators }}
 
     - id: infra-publish
-      name: Publishing to GitHub
+      name: Publishing Infra Code to GitHub
       action: publish:github:pull-request
       input:
         allowedHosts:
