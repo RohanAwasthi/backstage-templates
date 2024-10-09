@@ -46,6 +46,8 @@ spec:
           ui:options:
             allowedHosts:
               - github.com
+            allowedOwners:
+              - RohanAwasthi
     # - title: Configure Azure
     #   required:
     #     - subscription_id
