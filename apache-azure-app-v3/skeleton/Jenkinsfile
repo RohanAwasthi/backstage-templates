@@ -13,8 +13,8 @@ pipeline {
         AZURE_APP_NAME = '${{ values.component_id }}'
         AZURE_RG = 'devex-${{ values.component_id }}-rg'
         // Jenkins credentials (Azure Service Principal and ACR)
-        CLIENT_ID = credentials('azure-sp-app-id') // Service Principal ID
-        CLIENT_SECRET = credentials('azure-sp-password') // Service Principal Password
+        CLIENT_ID = credentials('azure-client-id') // Service Principal ID
+        CLIENT_SECRET = credentials('azure-client-secret') // Service Principal Password
         TENANT_ID = credentials('azure-tenant-id')     // Azure Tenant ID  
         ACR_CREDENTIALS = credentials('acr-sp-credentials')   // ACR Service Principal Username and Password
     }
