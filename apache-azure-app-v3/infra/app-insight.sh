@@ -5,8 +5,8 @@ resourceGroupName='devex-${{ values.component_id }}-rg'
 appName='${{ values.component_id }}'
 location="eastus"
 az login --service-principal -u $CID -p $CSECRET --tenant $TID
-appInsights=$(az monitor app-insights component create --app $appName --location $location --resource-group $resourceGroupName --application-type web--query instrumentationKey -o tsv)
-appInsightsConnection=$(az monitor app-insights component create --app $appName --resource-group $resourceGroupName --query connectionString -o tsv)
+appInsights=$(az monitor app-insights component create --app $appName --location ${location} --resource-group $resourceGroupName --application-type web --query instrumentationKey -o tsv)
+appInsightsConnection=$(az monitor app-insights component show --app $appName --resource-group $resourceGroupName --query connectionString -o tsv)
 echo "Application Insights resource created with Instrumentation Key: $appInsights"
 # Link Application Insights to the Web App
 echo "Linking Application Insights to Web App..."
