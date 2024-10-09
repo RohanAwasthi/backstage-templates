@@ -1,3 +1,5 @@
+#!/bin/bash
+
 webAppName='${{ values.component_id }}'
 resourceGroupName='devex-${{ values.component_id }}-rg'
 appName='${{ values.component_id }}'
