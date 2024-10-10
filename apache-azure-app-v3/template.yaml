@@ -2,7 +2,7 @@ apiVersion: scaffolder.backstage.io/v1beta3
 kind: Template
 metadata:
   name: apache-azure-web-app-V3
-  title: Apache Azure Terraform Template- V3
+  title: Apache Azure Terraform Template
   description: Simple apache web app hosted on Web App Service in Azure
   tags:
     - apache
