@@ -2,7 +2,7 @@ apiVersion: scaffolder.backstage.io/v1beta3
 kind: Template
 metadata:
   name: apache-azure-web-app
-  title: 2- Apache Azure VM Template
+  title: Azure VM Template
   description: Simple apache web app hosted on Azure VM 
   tags:
     - apache
