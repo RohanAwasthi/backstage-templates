@@ -183,7 +183,7 @@ spec:
         contentType: json 
         
     - id: jenkinsFolder
-      name: Create Jenkins Folder
+      name: Preparing Infra Deployment
       action: jenkins:folder:create
       input:
         repoUrl: ${{ parameters.repoUrl }}
@@ -191,7 +191,7 @@ spec:
         job: ${{ parameters.component_id }}
         
     - id: jenkinsJob
-      name: create jenkins Job
+      name: Validating Infra Deployment
       action: jenkins:customjob:create
       input:
         component_id: ${{ parameters.component_id }}
@@ -201,7 +201,7 @@ spec:
         job: ${{ parameters.component_id }}
         
     - id: jenkinsRun
-      name: Run Jenkins Job
+      name: Executing Infra Provisioning
       action: jenkins:job:run
       input:
         component_id: ${{ parameters.component_id }}
