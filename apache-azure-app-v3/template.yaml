@@ -209,7 +209,7 @@ spec:
       action: fs:delete
       input:
         files:
-            - Jenkinfile
+            - Jenkinsfile
             - catalog-info.yaml  
 
     - id: infra-template
