@@ -1,351 +1,156 @@
-apiVersion: scaffolder.backstage.io/v1beta3
+apiVersion: backstage.io/v1alpha1
 kind: Template
 metadata:
-  name: neeleshtestapp
-  title: neeleshtestapp
-  description: A Simple React Application hosted on Azure App Service
-  tags:
-    - react
-    - azure
-    - "applicationtype-appservice"
+  name: hpc-cache-terraform
+  title: HPC Cache Terraform Variables
+  description: Template to configure variables for HPC Cache in Terraform
 spec:
-  owner: group:EY
-  type: service
+  owner: your-team-name
+  type: terraform
   parameters:
-    - title: Fill in some steps
-      ui:ObjectFieldTemplate: TwoColumn
+    - title: HPC Cache Configuration
       properties:
-        component_id:
-          title: Name
+        name:
           type: string
-          description: Unique name of the component
-          ui:field: ValidateKebabCase
-        description:
-          title: Description
+          title: HPC Cache Name
+          description: "The name of the HPC Cache."
+          required: true
+        resource_group_name:
           type: string
-          description: Help others understand what this website is for.
-        owner:
-          title: Owner
+          title: Resource Group Name
+          description: "The name of the Resource Group in which to create the HPC Cache."
+          required: true
+        location:
           type: string
-          description: Owner of the component
-          ui:field: OwnerPicker
-          ui:options:
-            allowedKinds:
-              - Group
-              - User
-    - title: Basic Information
-      required:
-        - component_id
-        - owner
-      properties:
-        component_id:
-          title: Name
+          title: Azure Location
+          description: "Specifies the Azure Region for the HPC Cache."
+          required: true
+        cache_size_in_gb:
+          type: number
+          title: Cache Size (GB)
+          description: "The size of the HPC Cache, in GB."
+          enum:
+            - 3072
+            - 6144
+            - 12288
+            - 21623
+            - 24576
+            - 43246
+            - 49152
+            - 86491
+          required: true
+        subnet_id:
           type: string
-          description: Unique name of the component
-          ui:field: ValidateKebabCase
-        description:
-          title: Description
-          type: string
-          description: Help others understand what this website is for.
-        owner:
-          title: Owner
-          type: string
-          description: Owner of the component
-          ui:field: OwnerPicker
-          ui:options:
-            allowedKinds:
-              - Group
-              - User
-    - title: Source Code Manangement
-      required:
-        - repoUrl
-      properties:
-        repoUrl:
-          title: Repository Location
-          type: string
-          ui:field: RepoUrlPicker
-          ui:options:
-            allowedHosts:
-              - github.com
-            allowedOwners:
-              - RohanAwasthi
-        collaborators:
-          type: array
-          items:
-            type: 'object'
-            required: ['user', 'access']
-            properties:
-              access:
-                type: 'string'
-                description: 'The type of access for the user'
-                enum: ['push', 'pull', 'admin', 'maintain', 'triage']
-              user:
-                type: 'string'
-                description: 'The username or group'
-    # - title: Configure Azure
-    #   required:
-    #     - subscription_id
-    #   properties:
-    #     subscription_id:
-    #       title: Subscription ID
-    #       type: string
-    #       description: Azure subscription ID
-    # - title: Configure Azure Resource Group
-    #   required:
-    #     - rg_name
-    #     - rg_location
-    #   properties:
-    #     rg_name:
-    #       title: Resource Group Name
-    #       type: string
-    #       description: Azure resource group name
-    #     rg_location:
-    #       title: Resource Group Location
-    #       type: string
-    #       description: Azure resource group Location
-    # - title: Azure Virtual Network Details
-    #   required:
-    #     - vnet_name
-    #     - vnet_address_space
-    #   properties:
-    #     vnet_name:
-    #       title: VNet Name
-    #       type: string
-    #       description: Azure VNet name
-    #     vnet_address_space:
-    #       title: VNet CIDR
-    #       type: string
-    #       description: Azure VNet IPv4 CIDR
-    # - title: Azure Subnet Details
-    #   required:
-    #     - subnet_name
-    #     - subnet_address_prefixes
-    #   properties:
-    #     subnet_name:
-    #       title: Subnet Name
-    #       type: string
-    #       description: Subnet name
-    #     subnet_address_prefixes:
-    #       title: Subnet CIDR
-    #       type: string
-    #       description: Subnet's IPv4 CIDR
-    - title: Resource Configuration
-      required:
-        # - vm_name
-        - sku_name
-        # - vm_admin_username
-        - os_type
-      properties:
-        # vm_name:
-        #   title: azure Instance Name
-        #   type: string
-        #   description: Name of azure instance
+          title: Subnet ID
+          description: "The ID of the Subnet for the HPC Cache."
+          required: true
         sku_name:
-          title: Pricing Tier
           type: string
-          description: App Service plan pricing tier determines the location, features, cost and compute resources associated with your app.
+          title: SKU Name
+          description: "The SKU of the HPC Cache."
           enum:
-            - B1
-            - B2
-            - B3
-            - D1
-            - P1V2
-            - P2V2
-            - P3V2
-          enumNames:
-            - Basic B1
-            - Basic B2
-            - Basic B3
-            - Dev/Test
-            - Premium v2 P1V2
-            - Premium v2 P2V2
-            - Premium v2 P3V2
-        # vm_admin_username:
-        #   title: azure Instance Admin Username
-        #   type: string
-        #   description: Admin username of azure instance
-        os_type:
-          title: Operating System
+            - Standard_2G
+            - Standard_4G
+            - Standard_8G
+            - Standard_L4_5G
+            - Standard_L9G
+            - Standard_L16G
+          required: true
+        mtu:
+          type: number
+          title: MTU
+          description: "The IPv4 MTU for the subnet."
+          default: 1500
+          minimum: 576
+          maximum: 1500
+        default_access_policy_config:
+          type: object
+          title: Default Access Policy
+          properties:
+            access_rule_config:
+              type: array
+              items:
+                type: object
+                properties:
+                  scope: { type: string }
+                  access: { type: string }
+                  filter: { type: string, nullable: true }
+                  suid_enabled: { type: boolean }
+                  submount_access_enabled: { type: boolean }
+                  root_squash_enabled: { type: boolean }
+                  anonymous_uid: { type: string, nullable: true }
+                  anonymous_gid: { type: string, nullable: true }
+              default:
+                - scope: "default"
+                  access: "no"
+                  filter: null
+                  suid_enabled: false
+                  submount_access_enabled: false
+                  root_squash_enabled: false
+                  anonymous_uid: null
+                  anonymous_gid: null
+        ntp_server:
           type: string
-          description: The O/S type for the App Services to be hosted in this plan. Possible values include Windows, Linux
-          enum:
-            - Windows
-            - Linux
-    # - title:  Instance Key
-    #   required:
-    #     - instance_key
-    #   properties:
-    #     instance_key:
-    #       title: Instance Key
-    #       type: string
-    #       description: Key pair
-    # - title: Tags
-    #   required:
-    #     - ApplicationType
-    #   properties:
-    #     - ApplicationType:
-    #       title: Application Type
-    #       type: string
-    #       description: The type of application
+          title: NTP Server
+          description: "The NTP server for the HPC Cache."
+          default: "time.windows.com"
+        dns_config:
+          type: object
+          title: DNS Configuration
+          properties:
+            servers: 
+              type: array
+              items: { type: string, nullable: true }
+            search_domain: { type: string, nullable: true }
+        directory_active_directory_config:
+          type: object
+          title: Directory Active Directory Config
+          properties:
+            dns_primary_ip: { type: string, nullable: true }
+            domain_name: { type: string, nullable: true }
+            cache_netbios_name: { type: string, nullable: true }
+            domain_netbios_name: { type: string, nullable: true }
+            username: { type: string, nullable: true }
+            password: { type: string, nullable: true }
+            dns_secondary_ip: { type: string, nullable: true }
+        identity_config:
+          type: object
+          title: Identity Configuration
+          properties:
+            type: { type: string, nullable: true }
+            identity_ids: { type: string, nullable: true }
+        key_vault_key_id:
+          type: string
+          title: Key Vault Key ID
+          description: "The ID of the Key Vault Key."
+          default: null
+        automatically_rotate_key_to_latest_enabled:
+          type: string
+          title: Automatically Rotate Key
+          description: "Specifies if the HPC Cache rotates the key automatically."
+          default: null
+        tags:
+          type: object
+          title: Tags
+          additionalProperties: { type: string, nullable: true }
+
   steps:
-    - id: template
-      name: Fetching Template
-      action: fetch:template
-      input:
-        url: ./skeleton
-        copyWithoutRender:
-          - .github/workflows/*
-        values:
-          component_id: ${{ parameters.component_id }}
-          description: ${{ parameters.description }}
-          destination: ${{ parameters.repoUrl | parseRepoUrl }}
-          owner: ${{ parameters.owner }}
-          # subscription_id: ${{ parameters.subscription_id }}
-          # rg_location: ${{ parameters.rg_location }}
-          # rg_name: ${{ parameters.rg_name }}
-          # vnet_name: ${{ parameters.vnet_name }}
-          # vnet_address_space: ${{ parameters.vnet_address_space }}
-          # subnet_name: ${{ parameters.subnet_name }}
-          # subnet_address_prefixes: ${{ parameters.subnet_address_prefixes }}
-          os_type: ${{ parameters.os_type }}
-          sku_name: ${{ parameters.sku_name }}
-          # instance_key: ${{ parameters.instance_key }}
-          # ApplicationType: ${{parameters.ApplicationType}}
-
-    - id: publish
-      name: Publishing to GitHub
-      action: publish:github
-      input:
-        allowedHosts:
-          - github.com
-        description: This is ${{ parameters.component_id }}
-        repoUrl: ${{ parameters.repoUrl }}
-        repoVisibility: public
-        defaultBranch: main
-        # protectDefaultBranch: false
-        collaborators: ${{ parameters.collaborators }}
-
-    - id: delete-files
-      name: Remove excluded files
-      action: fs:delete
-      input:
-        files:
-            - Jenkinsfile
-            - catalog-info.yaml  
-
-    - id: infra-template
-      name: Fetching Infra Template
-      action: fetch:template
-      input:
-        url: ./infra
-        #targetPath: infra
-        copyWithoutRender:
-          - .github/workflows/*
-        values:
-          component_id: ${{ parameters.component_id }}
-          description: ${{ parameters.description }}
-          destination: ${{ parameters.repoUrl | parseRepoUrl }}
-          owner: ${{ parameters.owner }}
-          # subscription_id: ${{ parameters.subscription_id }}
-          # rg_location: ${{ parameters.rg_location }}
-          # rg_name: ${{ parameters.rg_name }}
-          # vnet_name: ${{ parameters.vnet_name }}
-          # vnet_address_space: ${{ parameters.vnet_address_space }}
-          # subnet_name: ${{ parameters.subnet_name }}
-          # subnet_address_prefixes: ${{ parameters.subnet_address_prefixes }}
-          os_type: ${{ parameters.os_type }}
-          sku_name: ${{ parameters.sku_name }}
-          # instance_key: ${{ parameters.instance_key }}
-          # ApplicationType: ${{parameters.ApplicationType}}
-
-    # - id: publish2
-    #   name: Publishing to GitHub2
-    #   action: github:repo:push
-    #   input:
-    #     allowedHosts:
-    #       - github.com
-    #     description: This is ${{ parameters.component_id }}
-    #     repoUrl: ${{ parameters.repoUrl }}
-    #     repoVisibility: private
-    #     defaultBranch: infra
-    #     collaborators: ${{ parameters.collaborators }}
-
-    # - id: publish2
-    #   name: Publishing to GitHub2
-    #   action: github:repo:push
-    #   input:
-    #     allowedHosts:
-    #       - github.com
-    #     description: This is ${{ parameters.component_id }}
-    #     repoUrl: ${{ parameters.repoUrl }}
-    #     repoVisibility: private
-    #     defaultBranch: infra
-    #     collaborators: ${{ parameters.collaborators }}
-
-    - id: infra-publish
-      name: Publishing Infra Code to GitHub
-      action: publish:github:pull-request
-      input:
-        allowedHosts:
-          - github.com
-        description: This is ${{ parameters.component_id }}
-        repoUrl: ${{ parameters.repoUrl }}
-        repoVisibility: public
-        branchName: infra
-        targetBranch: main
-        title: "Initial commit"
-
-    # - id: webhook
-    #   name: Adding webhook to Github Respository
-    #   action: github:webhook
-    #   input: 
-    #     repoUrl: ${{ parameters.repoUrl }}
-    #     # webhookUrl: http://10.1.0.228:8080/github-webhook/
-    #     webhookUrl: http://172.190.72.81:8080/github-webhook/
-    #     events:
-    #     - push
-    #     active: true
-    #     contentType: json 
-        
-    - id: jenkinsFolder
-      name: Preparing Infra Deployment
-      action: jenkins:folder:create
-      input:
-        repoUrl: ${{ parameters.repoUrl }}
-        folder: apache-azure-app2
-        job: ${{ parameters.component_id }}
-        
-    - id: jenkinsJob
-      name: Validating Infra Deployment
-      action: jenkins:customjob:create
-      input:
-        component_id: ${{ parameters.component_id }}
-        allowedHosts: ['github.com']
-        repoUrl: ${{ parameters.repoUrl }}
-        folder: apache-azure-app2
-        job: ${{ parameters.component_id }}
-        
-    - id: jenkinsRun
-      name: Executing Infra Provisioning
-      action: jenkins:job:run
-      input:
-        component_id: ${{ parameters.component_id }}
-        allowedHosts: ['github.com']
-        repoUrl: ${{ parameters.repoUrl }}
-        folder: apache-azure-app2
-        job: ${{ parameters.component_id }}
-        
-    - id: register
-      name: Register
-      action: catalog:register
-      input:
-        repoContentsUrl: ${{ steps.publish.output.repoContentsUrl }}
-        catalogInfoPath: "/catalog-info.yaml"
-        
-  output:
-    links:
-      - title: Repository
-        url: ${{ steps.publish.output.remoteUrl }}
-      - title: Open in catalog
-        icon: catalog
-        entityRef: ${{ steps.register.output.entityRef }}
+    - id: create
+      name: Create Terraform Variables
+      action: terraform:create
+      input: 
+        name: '{{ parameters.name }}'
+        resource_group_name: '{{ parameters.resource_group_name }}'
+        location: '{{ parameters.location }}'
+        cache_size_in_gb: '{{ parameters.cache_size_in_gb }}'
+        subnet_id: '{{ parameters.subnet_id }}'
+        sku_name: '{{ parameters.sku_name }}'
+        mtu: '{{ parameters.mtu }}'
+        default_access_policy_config: '{{ parameters.default_access_policy_config }}'
+        ntp_server: '{{ parameters.ntp_server }}'
+        dns_config: '{{ parameters.dns_config }}'
+        directory_active_directory_config: '{{ parameters.directory_active_directory_config }}'
+        identity_config: '{{ parameters.identity_config }}'
+        key_vault_key_id: '{{ parameters.key_vault_key_id }}'
+        automatically_rotate_key_to_latest_enabled: '{{ parameters.automatically_rotate_key_to_latest_enabled }}'
+        tags: '{{ parameters.tags }}'
