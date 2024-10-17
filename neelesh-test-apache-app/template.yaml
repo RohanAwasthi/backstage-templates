@@ -21,7 +21,7 @@ spec:
           title: Name
           type: string
           description: Unique name of the component
-          ui:field: EntityNamePicker
+          ui:field: ValidateKebabCase
         description:
           title: Description
           type: string
