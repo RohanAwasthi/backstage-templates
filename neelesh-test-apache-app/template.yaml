@@ -1,5 +1,5 @@
 apiVersion: scaffolder.backstage.io/v1beta3
-kind: template
+kind: Template
 metadata:
   name: neeleshtestapp
   title: neeleshtestapp
