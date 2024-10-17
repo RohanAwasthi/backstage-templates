@@ -12,6 +12,8 @@ spec:
   owner: group:EY
   type: service
   parameters:
+    - title: Fill in some steps
+      ui:ObjectFieldTemplate: TwoColumn
     - title: Basic Information
       required:
         - component_id
