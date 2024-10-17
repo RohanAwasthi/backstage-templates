@@ -1,5 +1,5 @@
 apiVersion: scaffolder.backstage.io/v1beta3
-kind: Template
+kind: Infra
 metadata:
   name: neeleshtestapp
   title: neeleshtestapp
@@ -10,7 +10,7 @@ metadata:
     - "applicationtype-appservice"
 spec:
   owner: group:EY
-  type: service
+  type: baseline
   parameters:
     - title: Fill in some steps
       ui:ObjectFieldTemplate: TwoColumn
