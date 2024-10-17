@@ -1,8 +1,8 @@
 apiVersion: scaffolder.backstage.io/v1beta3
 kind: Template
 metadata:
-  name: apache-azure-web-app-V3
-  title: Azure React Web App Template
+  name: neeleshtestapp
+  title: neeleshtestapp
   description: A Simple React Application hosted on Azure App Service
   tags:
     - react
