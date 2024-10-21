@@ -62,7 +62,6 @@ spec:
                 title: Username
                 type: 'string'
                 description: 'The username or group'
-                ui:field: ValidateGithubUsername
     # - title: Configure Azure
     #   required:
     #     - subscription_id
