@@ -19,7 +19,7 @@ spec:
       properties:
         component_id:
           title: File
-          type: file
+          type: string
           description: Unique name of the component
           ui:field: FileUpload
         description:
