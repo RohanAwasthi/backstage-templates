@@ -18,10 +18,10 @@ spec:
         - owner
       properties:
         component_id:
-          title: Name
-          type: string
+          title: File
+          type: file
           description: Unique name of the component
-          ui:field: ValidateKebabCase
+          ui:field: FileUpload
         description:
           title: Description
           type: string
