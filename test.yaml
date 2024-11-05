@@ -1,0 +1,443 @@
+apiVersion: scaffolder.backstage.io/v1beta3
+kind: Template
+metadata:
+  name: create-azure-keyvault
+  title: Create an Azure Key Vault
+  description: Create an Azure Key Vault with specified access policies and network settings
+  tags: ["azure", "keyvault", "security"]
+spec:
+  owner: guests
+  type: service
+  # Edit the template parameters below to see how they will render in the scaffolder form UI
+  parameters:
+    - title: Azure Key Vault Configuration
+      required:
+        - keyvault_name
+        - location
+        - resource_group_name
+        - kv_sku
+        - access_policy
+        - enabled_for_deployment
+        - enabled_for_disk_encryption
+        - enabled_for_template_deployment
+        - enable_rbac_authorization
+        - network_acls
+        - purge_protection_enabled
+        - public_network_access_enabled
+        - soft_delete_retention_days
+        - contact
+        - tags
+        - component_id
+        - owner
+      properties:
+        component_id:
+          title: Name
+          type: string
+          description: Unique name of the component
+          ui:field: EntityNamePicker
+
+        description:
+          title: Description
+          type: string
+          description: Help others understand what this website is for.
+
+        owner:
+          title: Owner
+          type: string
+          description: Owner of the component
+          ui:field: OwnerPicker
+          ui:options:
+            allowedKinds:
+              - Group
+              - User
+
+    - title: Source Code Manangement
+      required:
+        - repoUrl
+      properties:
+          repoUrl:
+            title: Repository Location
+            type: string
+            ui:field: RepoUrlPicker
+            ui:options:
+              allowedHosts:
+                - github.com
+              allowedOwners:
+                - Aswin
+
+          keyvault_name:
+            title: Key Vault Name
+            type: string
+            description: The name of the Azure Key Vault.
+            ui:autofocus: true
+
+          location:
+            title: Azure Region
+            type: string
+            description: The Azure region where the Key Vault will be created.
+
+          resource_group_name:
+            title: Resource Group Name
+            type: string
+            description: The name of the resource group where the Key Vault will be created.
+
+          kv_sku:
+            title: Key Vault SKU
+            type: string
+            description: The SKU of the Azure Key Vault.
+            default: "standard"
+
+          access_policy:
+            title: Access Policies
+            type: array
+            description: The access policies for the Azure Key Vault.
+            items:
+              type: object
+              properties:
+                application_id:
+                  type: string
+                key_permissions:
+                  type: array
+                  items:
+                    type: string
+                secret_permissions:
+                  type: array
+                  items:
+                    type: string
+                certificate_permissions:
+                  type: array
+                  items:
+                    type: string
+                storage_permissions:
+                  type: array
+                  items:
+                    type: string
+
+          enabled_for_deployment:
+            title: Enabled for Deployment
+            type: boolean
+            description: Specifies if the Key Vault is enabled for deployment.
+            default: true
+
+          enabled_for_disk_encryption:
+            title: Enabled for Disk Encryption
+            type: boolean
+            description: Specifies if the Key Vault is enabled for disk encryption.
+            default: true
+
+          enabled_for_template_deployment:
+            title: Enabled for Template Deployment
+            type: boolean
+            description: Specifies if the Key Vault is enabled for template deployment.
+            default: true
+
+          enable_rbac_authorization:
+            title: Enable RBAC Authorization
+            type: boolean
+            description: Specifies if RBAC authorization is enabled for the Key Vault.
+            default: false
+
+          network_acls:
+            title: Network ACLs
+            type: object
+            description: The network ACLs for the Azure Key Vault.
+            properties:
+              bypass:
+                type: string
+              default_action:
+                type: string
+              ip_rules:
+                type: array
+                items:
+                  type: string
+              virtual_network_subnet_ids:
+                type: array
+                items:
+                  type: string
+
+          purge_protection_enabled:
+            title: Purge Protection Enabled
+            type: boolean
+            description: Specifies if purge protection is enabled for the Key Vault.
+            default: false
+
+          public_network_access_enabled:
+            title: Public Network Access Enabled
+            type: boolean
+            description: Specifies if public network access is enabled for the Key Vault.
+            default: true
+
+          soft_delete_retention_days:
+            title: Soft Delete Retention Days
+            type: integer
+            description: The number of days that the Key Vault will retain deleted secrets.
+            default: 7
+
+          contact:
+            title: Contact Information
+            type: array
+            description: The contact information for the Key Vault.
+            items:
+              type: object
+              properties:
+                email:
+                  type: string
+                name:
+                  type: string
+                phone:
+                  type: string
+
+          tags:
+            title: Tags
+            type: object
+            description: The tags to be applied to the Key Vault.
+            properties:
+              Contact_name:
+                type: string
+              Cost_Center:
+                type: string
+              Application_name:
+                type: string
+
+          action:
+            title: action
+            type: string
+            description: What action do you want to perform? Create or delete?
+            enum:
+              - plan
+              - apply
+              - destroy
+
+    - title: Key Vault Access Policy Configuration
+      properties:
+        policies:
+          title: Access Policies
+          type: array
+          description: The access policies for the Azure Key Vault.
+          items:
+            type: object
+            properties:
+              certificate_permissions:
+                type: array
+                items:
+                  type: string
+              key_permissions:
+                type: array
+                items:
+                  type: string
+              object_id:
+                type: string
+              secret_permissions:
+                type: array
+                items:
+                  type: string
+              storage_permissions:
+                type: array
+                items:
+                  type: string
+              tenant_id:
+                type: string
+              application_id:
+                type: string
+
+    - title: Private Endpoint Configuration
+      properties:
+          create_private_endpoint:
+            title: Create Private Endpoint
+            type: boolean
+            description: Specifies if a private endpoint should be created for the Key Vault.
+            default: true
+
+          private_endpoint_name:
+            title: Private Endpoint Name
+            type: string
+            description: The name of the private endpoint.
+
+          private_service_connection_name:
+            title: Private Service Connection Name
+            type: string
+            description: The name of the private service connection.
+
+          subresource_names:
+            title: Subresource Names
+            type: array
+            description: The subresource names for the private endpoint.
+            items:
+              type: string
+
+          is_manual_connection:
+            title: Is Manual Connection
+            type: boolean
+            description: Specifies if the connection is manual.
+            default: false
+
+          request_message:
+            title: Request Message
+            type: string
+            description: The request message for the private endpoint.
+
+          private_connection_resource_id:
+            title: Private Connection Resource ID
+            type: string
+            description: The resource ID for the private connection.
+
+          subnet_id:
+            title: Subnet ID
+            type: string
+            description: The subnet ID for the private endpoint.
+
+          private_dns_zone_group:
+            title: Private DNS Zone Group
+            type: string
+            description: The private DNS zone group for the private endpoint.
+
+          private_connection_resource_alias:
+            title: Private Connection Resource Alias
+            type: string
+            description: The resource alias for the private connection.
+
+    - title: Choose a Repository Location
+      required:
+        - repoUrl
+      properties:
+        repoUrl:
+          title: Location of the repository
+          type: string
+          ui:field: RepoUrlPicker
+          ui:options:
+            allowedHosts:
+              - github.com
+steps:
+  # Getting the all the files/details from the template
+  - id: fetch-base
+    name: Fetching Details from content folder
+    action: fetch:template
+    input:
+      url: ./content # Location of the content directory where catlog-info.yaml file is present for the template
+      values:
+        name: ${{ parameters.Name }}
+
+  # Publish the content of the current working directory to our github directory
+  - id: publish
+    name: Publishing Details
+    action: publish:github
+    input:
+      allowedHosts: ["github.com"]
+      description: This repo is to create the Resource Group ${{ parameters.Name }} using backstage.
+      repoUrl: ${{ parameters.repoUrl }}
+      repoVisibility: private # or 'internal' or 'private'
+      # defaultBranch: master
+
+  # Triggering CI-CD to create resource in our case github action.
+  # - id: github-action
+  #   name: Starting GitHub action
+  #   action: github:actions:dispatch
+  #   input:
+  #     workflowId:  terraform.yml # ID of GitHub action WorkFlow
+  #     repoUrl: 'https://github.com/IN010M50751_EYGS/devex_hari'
+  #     branchOrTagName: 'develop'
+  #     workflowInputs:
+  #       keyvault_name: ${{ parameters.keyvault_name }}
+  #       location: ${{ parameters.location }}
+  #       resource_group_name: ${{ parameters.resource_group_name }}
+  #       kv_sku: ${{ parameters.keyvault_name }}
+  #       access_policy: ${{ parameters.access_policy }}
+  #       enabled_for_deployment: ${{ parameters.enabled_for_deployment }}
+  #       enabled_for_disk_encryption: ${{ parameters.enabled_for_disk_encryption }}
+  #       enabled_for_template_deployment: ${{ parameters.enabled_for_template_deployment }}
+  #       enable_rbac_authorization: ${{ parameters.enable_rbac_authorization }}
+  #       network_acls: ${{ parameters.network_acls }}
+  #       purge_protection_enabled: ${{ parameters.purge_protection_enabled }}
+  #       public_network_access_enabled: ${{ parameters.public_network_access_enabled }}
+  #       soft_delete_retention_days: ${{ parameters.soft_delete_retention_days }}
+  #       contact: ${{ parameters.contact }}
+  #       tags: ${{ parameters.tags }}
+  #       action: ${{ parameters.action }}
+
+  - id: infra-template
+    name: Fetching Infra Template
+    action: fetch:template
+    input:
+      url: ./infra
+      #targetPath: infra
+      copyWithoutRender:
+        - .github/workflows/*
+      values:
+        component_id: ${{ parameters.component_id }}
+        description: ${{ parameters.description }}
+        destination: ${{ parameters.repoUrl | parseRepoUrl }}
+        owner: ${{ parameters.owner }}
+        keyvault_name: ${{ parameters.keyvault_name }}
+        location: ${{ parameters.location }}
+        resource_group_name: ${{ parameters.resource_group_name }}
+        kv_sku: ${{ parameters.keyvault_name }}
+        access_policy: ${{ parameters.access_policy }}
+        enabled_for_deployment: ${{ parameters.enabled_for_deployment }}
+        enabled_for_disk_encryption: ${{ parameters.enabled_for_disk_encryption }}
+        enabled_for_template_deployment: ${{ parameters.enabled_for_template_deployment }}
+        enable_rbac_authorization: ${{ parameters.enable_rbac_authorization }}
+        network_acls: ${{ parameters.network_acls }}
+        purge_protection_enabled: ${{ parameters.purge_protection_enabled }}
+        public_network_access_enabled: ${{ parameters.public_network_access_enabled }}
+        soft_delete_retention_days: ${{ parameters.soft_delete_retention_days }}
+        contact: ${{ parameters.contact }}
+        tags: ${{ parameters.tags }}
+        action: ${{ parameters.action }}
+
+  - id: infra-publish
+    name: Publishing Infra Code to GitHub
+    action: publish:github:pull-request
+    input:
+      allowedHosts:
+        - github.com
+      description: This is ${{ parameters.component_id }}
+      repoUrl: ${{ parameters.repoUrl }}
+      repoVisibility: public
+      branchName: infra
+      targetBranch: main
+      title: "Initial commit"
+
+  - id: jenkinsFolder
+    name: Preparing Infra Deployment
+    action: jenkins:folder:create
+    input:
+      repoUrl: ${{ parameters.repoUrl }}
+      folder: apache-azure-app2
+      job: ${{ parameters.component_id }}
+
+  - id: jenkinsJob
+    name: Validating Infra Deployment
+    action: jenkins:customjob:create
+    input:
+      component_id: ${{ parameters.component_id }}
+      allowedHosts: ["github.com"]
+      repoUrl: ${{ parameters.repoUrl }}
+      folder: apache-azure-app2
+      job: ${{ parameters.component_id }}
+
+  - id: jenkinsRun
+    name: Executing Infra Provisioning
+    action: jenkins:job:run
+    input:
+      component_id: ${{ parameters.component_id }}
+      allowedHosts: ["github.com"]
+      repoUrl: ${{ parameters.repoUrl }}
+      folder: apache-azure-app2
+      job: ${{ parameters.component_id }}
+
+  # Registering new component in the catalog of backstage.
+  - id: register
+    name: Registering the new Component
+    action: catalog:register
+    input:
+      repoContentsUrl: ${{steps['publish'].output.repoContentsUrl }}
+      catalogInfoPath: "/component-info.yaml" # where the info of the catalog is stored.
+
+# Output links  are displayed to the user after the template execution.
+output:
+  links:
+    - title: Repository
+      url: ${{ steps['publish'].output.remoteUrl }}
+    - title: Open in catalog
+      icon: catalog
+      entityRef: ${{ steps['register'].output.entityRef }}
